@@ -6,9 +6,8 @@ import './globals.css'
 import AppShell from '@/components/app-shell'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'Admin - Dashboard',
+  generator: 'Admin Dashboard',
 }
 
 export default function RootLayout({
