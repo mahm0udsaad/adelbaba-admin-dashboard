@@ -20,7 +20,7 @@ export default async function VerificationRequestsPage({ searchParams }: { searc
   const status = (searchParams.status && searchParams.status !== "all" ? searchParams.status : undefined) as RequestStatus | undefined
   const params = { status, company_id: searchParams.company_id, verified_by: searchParams.verified_by, per_page: perPage, page }
   const data = await listVerificationRequests(params)
-
+  
   return (
     <div className="space-y-4">
       <FiltersBar initialParams={searchParams} />
