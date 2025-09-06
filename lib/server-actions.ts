@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers"
 
-const BASE_URL = "https://test.hgallerycandles.com/api/v1/admin"
+const BASE_URL = "https://api.adil-baba.com/api/v1/admin"
 
 async function getAuthTokenFromCookies(): Promise<string | undefined> {
   const store = await cookies()
