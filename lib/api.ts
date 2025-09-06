@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL: "api.adil-baba.com/api/v1/admin",
+  baseURL: "https://api.adil-baba.com/api/v1/admin",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
