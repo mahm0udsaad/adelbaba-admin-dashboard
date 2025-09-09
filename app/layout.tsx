@@ -3,7 +3,7 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
-import AppShell from '@/components/app-shell'
+import ConditionalShell from '@/components/conditional-shell'
 
 export const metadata: Metadata = {
   title: 'Admin - Dashboard',
@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <AppShell>{children}</AppShell>
+        <ConditionalShell>{children}</ConditionalShell>
         <Analytics />
       </body>
     </html>
