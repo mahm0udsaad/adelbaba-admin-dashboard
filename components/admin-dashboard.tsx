@@ -18,12 +18,14 @@ import {
   Filter,
   BarChart3,
   Loader2,
+  Layers,
 } from "lucide-react"
 
 import { DashboardOverview } from "./dashboard/dashboard-overview"
 import { CompaniesPage } from "./dashboard/companies-page"
 import { UsersPage } from "./dashboard/users-page"
 import { SupportTicketsPage } from "./dashboard/support-tickets-page"
+import { CategoriesPage } from "./dashboard/categories-page"
 
 const navigation = [
   { name: "Dashboard", icon: BarChart3, id: "dashboard" },
@@ -35,6 +37,7 @@ const navigation = [
   { name: "Subscription Plans", icon: CreditCard, id: "plans" },
   { name: "Subscription Features", icon: Star, id: "features" },
   { name: "Ads", icon: Megaphone, id: "ads" },
+  { name: "Categories", icon: Layers, id: "categories" },
   { name: "Units", icon: Package, id: "units" },
   { name: "Variations", icon: Palette, id: "variations" },
   { name: "Variation Values", icon: Settings, id: "variation-values" },
@@ -75,6 +78,12 @@ export function AdminDashboard() {
         return (
           <Suspense fallback={<LoadingFallback message="Loading support tickets..." />}>
             <SupportTicketsPage />
+          </Suspense>
+        )
+      case "categories":
+        return (
+          <Suspense fallback={<LoadingFallback message="Loading categories..." />}>
+            <CategoriesPage />
           </Suspense>
         )
       default:
@@ -145,7 +154,8 @@ export function AdminDashboard() {
                 {activeTab === "companies" && "Manage registered companies and their information"}
                 {activeTab === "users" && "Manage user accounts and permissions"}
                 {activeTab === "tickets" && "Handle customer support requests and issues"}
-                {!["dashboard", "companies", "users", "tickets"].includes(activeTab) &&
+                {activeTab === "categories" && "Organize product categories and featured listings"}
+                {!["dashboard", "companies", "users", "tickets", "categories"].includes(activeTab) &&
                   "Manage system resources and configurations"}
               </p>
             </div>

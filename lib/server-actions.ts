@@ -2,7 +2,10 @@
 
 import { cookies } from "next/headers"
 
-const BASE_URL = "https://api.adil-baba.com/api/v1/admin"
+const BASE_URL =
+  process.env.ADMIN_API_URL ??
+  process.env.NEXT_PUBLIC_ADMIN_API_URL ??
+  "https://api.adil-baba.com/api/v1/admin"
 
 async function getAuthTokenFromCookies(): Promise<string | undefined> {
   const store = await cookies()
@@ -137,6 +140,16 @@ export async function getAds(params?: { page?: number; search?: string; status?:
 
 export async function getAd(id: number | string) {
   const data = await fetchWithAuth(`/ads/${id}`)
+  return data?.data ?? data
+}
+
+export async function getCategories(params?: { page?: number; search?: string }) {
+  const data = await fetchWithAuth("/categories", params)
+  return data?.data ?? data
+}
+
+export async function getCategory(id: number | string) {
+  const data = await fetchWithAuth(`/categories/${id}`)
   return data?.data ?? data
 }
 
@@ -312,4 +325,3 @@ export async function updateVerificationRequest(
   const payload = json?.data ?? json
   return mapSupplierRequestShape(payload)
 }
-

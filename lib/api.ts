@@ -1,7 +1,12 @@
 import axios from "axios"
 
+const ADMIN_API_BASE_URL =
+  process.env.NEXT_PUBLIC_ADMIN_API_URL ??
+  process.env.ADMIN_API_URL ??
+  "https://api.adil-baba.com/api/v1/admin"
+
 const api = axios.create({
-  baseURL: "https://api.adil-baba.com/api/v1/admin",
+  baseURL: ADMIN_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -86,8 +91,8 @@ export const apiService = {
     api.get("/support-tickets", { params }),
   fetchAssignedTickets: () => api.get("/support-tickets/assigned"),
   fetchSupportTicket: (id: number) => api.get(`/support-tickets/${id}`),
-  fetchTicketLogs: () => api.get("/support-ticket-logs"),
-  replyToTicket: (id: number, data: { message: string }) => api.post(`/support-tickets/${id}/reply`, data),
+  fetchTicketLogs: (id: number) => api.get(`/support-tickets/${id}/logs`),
+  replyToTicket: (id: number, data: { message: string }) => api.post(`/support-tickets/${id}`, data),
   updateTicket: (id: number, data: { status?: string; priority?: string }) => api.patch(`/support-tickets/${id}`, data),
   assignTicket: (id: number, assignee_id: number) => api.patch(`/support-tickets/${id}/assign`, { assignee_id }),
   deleteTicket: (id: number) => api.delete(`/support-tickets/${id}`),
@@ -111,6 +116,21 @@ export const apiService = {
   addMediaToAd: (id: number, media: FormData) =>
     api.post(`/ads/${id}/media`, media, { headers: { "Content-Type": "multipart/form-data" } }),
   deleteAdMedia: (adId: number, mediaId: number) => api.delete(`/ads/${adId}/media/${mediaId}`),
+
+  // Categories
+  fetchCategories: (params?: { page?: number; search?: string }) => api.get("/categories", { params }),
+  fetchCategory: (id: number) => api.get(`/categories/${id}`),
+  createCategory: (data: FormData) =>
+    api.post("/categories", data, { headers: { "Content-Type": "multipart/form-data" } }),
+  updateCategory: (id: number, data: FormData) => {
+    if (!data.has("_method")) {
+      data.append("_method", "PUT")
+    }
+    return api.post(`/categories/${id}`, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+  },
+  deleteCategory: (id: number) => api.delete(`/categories/${id}`),
 
   // Products
   fetchUnits: () => api.get("/units"),
