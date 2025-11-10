@@ -1,0 +1,2672 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Default module",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [],
+  "paths": {
+    "/api/v1/admin/subscriptions/plans": {
+      "get": {
+        "summary": "List Plans",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "payment_rate": {
+                            "type": "string"
+                          },
+                          "duration_in_days": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "string"
+                          },
+                          "updated_at": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "payment_rate",
+                          "duration_in_days",
+                          "price",
+                          "created_at",
+                          "updated_at"
+                        ]
+                      }
+                    },
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "prev": {
+                          "type": "null"
+                        },
+                        "next": {
+                          "type": "null"
+                        }
+                      },
+                      "required": [
+                        "first",
+                        "last",
+                        "prev",
+                        "next"
+                      ]
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "from": {
+                          "type": "integer"
+                        },
+                        "last_page": {
+                          "type": "integer"
+                        },
+                        "links": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "active": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "url",
+                              "label",
+                              "active"
+                            ]
+                          }
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        },
+                        "to": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "current_page",
+                        "from",
+                        "last_page",
+                        "links",
+                        "path",
+                        "per_page",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "links",
+                    "meta"
+                  ]
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": 1,
+                      "name": "Basic",
+                      "payment_rate": "yearly",
+                      "duration_in_days": "365",
+                      "price": "699.00",
+                      "created_at": "2025-10-28T05:27:54.000000Z",
+                      "updated_at": "2025-10-28T05:27:54.000000Z"
+                    },
+                    {
+                      "id": 2,
+                      "name": "Plus",
+                      "payment_rate": "yearly",
+                      "duration_in_days": "365",
+                      "price": "900.00",
+                      "created_at": "2025-10-28T05:27:54.000000Z",
+                      "updated_at": "2025-10-28T05:27:54.000000Z"
+                    },
+                    {
+                      "id": 3,
+                      "name": "Plus+",
+                      "payment_rate": "yearly",
+                      "duration_in_days": "365",
+                      "price": "1300.00",
+                      "created_at": "2025-10-28T05:27:54.000000Z",
+                      "updated_at": "2025-10-28T05:27:54.000000Z"
+                    },
+                    {
+                      "id": 4,
+                      "name": "Premium",
+                      "payment_rate": "yearly",
+                      "duration_in_days": "365",
+                      "price": "1500.00",
+                      "created_at": "2025-10-28T05:27:54.000000Z",
+                      "updated_at": "2025-10-28T05:27:54.000000Z"
+                    }
+                  ],
+                  "links": {
+                    "first": "https://adilbaba.test/api/v1/admin/subscriptions/plans?page=1",
+                    "last": "https://adilbaba.test/api/v1/admin/subscriptions/plans?page=1",
+                    "prev": null,
+                    "next": null
+                  },
+                  "meta": {
+                    "current_page": 1,
+                    "from": 1,
+                    "last_page": 1,
+                    "links": [
+                      {
+                        "url": null,
+                        "label": "&laquo; Previous",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/admin/subscriptions/plans?page=1",
+                        "label": "1",
+                        "active": true
+                      },
+                      {
+                        "url": null,
+                        "label": "Next &raquo;",
+                        "active": false
+                      }
+                    ],
+                    "path": "https://adilbaba.test/api/v1/admin/subscriptions/plans",
+                    "per_page": 15,
+                    "to": 4,
+                    "total": 4
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create a Subscription Plan",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": "{\r\n    \"name\": \"Diamond Plan\",\r\n    \"payment_rate\": \"yearly\", // monthly || yearly || quarterly || biyearly || lifetime\r\n    \"price\": 340,\r\n    \"features\": [\r\n        {\r\n            \"id\": 2, // Feature ID\r\n            \"value\": true // Value casted to the feature type (bool, int, decimal)\r\n        },\r\n        {\r\n            \"id\": 3, // Feature ID\r\n            \"value\": 21\r\n        },\r\n        {\r\n            \"id\": 4, // Feature ID\r\n            \"value\": false\r\n        },\r\n        {\r\n            \"id\": 5, // Feature ID\r\n            \"value\": false\r\n        },\r\n        {\r\n            \"id\": 6, // Feature ID\r\n            \"value\": true\r\n        }\r\n    ]\r\n}"
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "payment_rate": {
+                          "type": "string"
+                        },
+                        "duration_in_days": {
+                          "type": "integer"
+                        },
+                        "price": {
+                          "type": "integer"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "features": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "key": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "description",
+                              "type",
+                              "key",
+                              "value"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "payment_rate",
+                        "duration_in_days",
+                        "price",
+                        "created_at",
+                        "updated_at",
+                        "features"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "message": "Subscription plan created successfully.",
+                  "data": {
+                    "id": 8,
+                    "name": "Diamond Plan",
+                    "payment_rate": "yearly",
+                    "duration_in_days": 365,
+                    "price": 340,
+                    "created_at": "2025-10-28T06:17:20.000000Z",
+                    "updated_at": "2025-10-28T06:17:20.000000Z",
+                    "features": [
+                      {
+                        "id": 2,
+                        "name": "Star Direct",
+                        "description": "Enables the Star Direct feature for suppliers.",
+                        "type": "bool",
+                        "key": "star_direct",
+                        "value": "1"
+                      },
+                      {
+                        "id": 3,
+                        "name": "Showcase Products Limit",
+                        "description": "Number of products allowed in Showcase.",
+                        "type": "int",
+                        "key": "showcase_limit",
+                        "value": "21"
+                      },
+                      {
+                        "id": 4,
+                        "name": "RFQs per Month",
+                        "description": "Number of RFQs allowed per month.",
+                        "type": "int",
+                        "key": "rfq_limit",
+                        "value": "0"
+                      },
+                      {
+                        "id": 5,
+                        "name": "Analytics Tools",
+                        "description": "Access to analytics tools for tracking performance.",
+                        "type": "bool",
+                        "key": "analytics_tools",
+                        "value": "0"
+                      },
+                      {
+                        "id": 6,
+                        "name": "Sub Accounts",
+                        "description": "Number of sub-accounts allowed for the supplier.",
+                        "type": "int",
+                        "key": "sub_accounts",
+                        "value": "1"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/subscriptions/plans/{id}": {
+      "get": {
+        "summary": "Show Plan Details",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Plan ID",
+            "required": true,
+            "example": "3",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "payment_rate": {
+                          "type": "string"
+                        },
+                        "duration_in_days": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "string"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "features": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "key": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "description",
+                              "type",
+                              "key",
+                              "value"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "payment_rate",
+                        "duration_in_days",
+                        "price",
+                        "created_at",
+                        "updated_at",
+                        "features"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "example": {
+                  "data": {
+                    "id": 3,
+                    "name": "Plus+",
+                    "payment_rate": "yearly",
+                    "duration_in_days": "365",
+                    "price": "1300.00",
+                    "created_at": "2025-10-28T05:27:54.000000Z",
+                    "updated_at": "2025-10-28T05:27:54.000000Z",
+                    "features": [
+                      {
+                        "id": 1,
+                        "name": "Unlimited Online Store",
+                        "description": "Allows the supplier to have unlimited products in their store.",
+                        "type": "bool",
+                        "key": "unlimited_store",
+                        "value": "1"
+                      },
+                      {
+                        "id": 2,
+                        "name": "Star Direct",
+                        "description": "Enables the Star Direct feature for suppliers.",
+                        "type": "bool",
+                        "key": "star_direct",
+                        "value": "1"
+                      },
+                      {
+                        "id": 3,
+                        "name": "Showcase Products Limit",
+                        "description": "Number of products allowed in Showcase.",
+                        "type": "int",
+                        "key": "showcase_limit",
+                        "value": "20"
+                      },
+                      {
+                        "id": 4,
+                        "name": "RFQs per Month",
+                        "description": "Number of RFQs allowed per month.",
+                        "type": "int",
+                        "key": "rfq_limit",
+                        "value": "40"
+                      },
+                      {
+                        "id": 5,
+                        "name": "Analytics Tools",
+                        "description": "Access to analytics tools for tracking performance.",
+                        "type": "bool",
+                        "key": "analytics_tools",
+                        "value": "1"
+                      },
+                      {
+                        "id": 6,
+                        "name": "Sub Accounts",
+                        "description": "Number of sub-accounts allowed for the supplier.",
+                        "type": "int",
+                        "key": "sub_accounts",
+                        "value": "5"
+                      },
+                      {
+                        "id": 7,
+                        "name": "Keyword Ad Budget",
+                        "description": "Amount of ad budget in USD.",
+                        "type": "decimal",
+                        "key": "ad_budget",
+                        "value": "3000"
+                      },
+                      {
+                        "id": 8,
+                        "name": "Early RFQs",
+                        "description": "Get RFQs earlier than free users.",
+                        "type": "bool",
+                        "key": "early_rfq",
+                        "value": "1"
+                      },
+                      {
+                        "id": 9,
+                        "name": "Priority RFQ Access",
+                        "description": "Higher priority for RFQ responses.",
+                        "type": "bool",
+                        "key": "priority_rfq",
+                        "value": "1"
+                      },
+                      {
+                        "id": 10,
+                        "name": "Sponsored Ads",
+                        "description": "Allows sponsored ads for the supplier.",
+                        "type": "bool",
+                        "key": "sponsored_ads",
+                        "value": "1"
+                      },
+                      {
+                        "id": 11,
+                        "name": "Online Fairs Participation",
+                        "description": "Access to online fairs and exhibitions.",
+                        "type": "bool",
+                        "key": "online_fairs",
+                        "value": "1"
+                      },
+                      {
+                        "id": 12,
+                        "name": "Dedicated Training",
+                        "description": "Dedicated training sessions for the supplier.",
+                        "type": "bool",
+                        "key": "training",
+                        "value": "1"
+                      },
+                      {
+                        "id": 13,
+                        "name": "Monthly Service Reports",
+                        "description": "Monthly reports about supplier performance.",
+                        "type": "bool",
+                        "key": "monthly_report",
+                        "value": "1"
+                      },
+                      {
+                        "id": 14,
+                        "name": "Industry Report",
+                        "description": "Access to industry reports and insights.",
+                        "type": "bool",
+                        "key": "industry_report",
+                        "value": "1"
+                      },
+                      {
+                        "id": 15,
+                        "name": "Quarterly Consultation",
+                        "description": "Quarterly consultation sessions with experts.",
+                        "type": "bool",
+                        "key": "consultation",
+                        "value": "1"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": "Record not found."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update a Subscription Plan",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Plan ID",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": "{\r\n    \"name\": \"Diamond Plan\",\r\n    \"payment_rate\": \"yearly\", // monthly || yearly || quarterly || biyearly || lifetime\r\n    \"price\": 340,\r\n    \"features\": [\r\n        {\r\n            \"id\": 2, // Feature ID\r\n            \"value\": true // Value casted to the feature type (bool, int, decimal)\r\n        },\r\n        {\r\n            \"id\": 3, // Feature ID\r\n            \"value\": 21\r\n        },\r\n        {\r\n            \"id\": 4, // Feature ID\r\n            \"value\": false\r\n        },\r\n        {\r\n            \"id\": 5, // Feature ID\r\n            \"value\": false\r\n        },\r\n        {\r\n            \"id\": 6, // Feature ID\r\n            \"value\": true\r\n        }\r\n    ]\r\n}"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "payment_rate": {
+                          "type": "string"
+                        },
+                        "duration_in_days": {
+                          "type": "integer"
+                        },
+                        "price": {
+                          "type": "integer"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "features": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "key": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "description",
+                              "type",
+                              "key",
+                              "value"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "payment_rate",
+                        "duration_in_days",
+                        "price",
+                        "created_at",
+                        "updated_at",
+                        "features"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "message": "Subscription plan updated successfully.",
+                  "data": {
+                    "id": 1,
+                    "name": "Diamond Plan",
+                    "payment_rate": "yearly",
+                    "duration_in_days": 365,
+                    "price": 340,
+                    "created_at": "2025-10-13T05:07:16.000000Z",
+                    "updated_at": "2025-10-28T06:44:23.000000Z",
+                    "features": [
+                      {
+                        "id": 2,
+                        "name": "Star Direct",
+                        "description": "Enables the Star Direct feature for suppliers.",
+                        "type": "bool",
+                        "key": "star_direct",
+                        "value": "1"
+                      },
+                      {
+                        "id": 3,
+                        "name": "Showcase Products Limit",
+                        "description": "Number of products allowed in Showcase.",
+                        "type": "int",
+                        "key": "showcase_limit",
+                        "value": "21"
+                      },
+                      {
+                        "id": 4,
+                        "name": "RFQs per Month",
+                        "description": "Number of RFQs allowed per month.",
+                        "type": "int",
+                        "key": "rfq_limit",
+                        "value": "0"
+                      },
+                      {
+                        "id": 5,
+                        "name": "Analytics Tools",
+                        "description": "Access to analytics tools for tracking performance.",
+                        "type": "bool",
+                        "key": "analytics_tools",
+                        "value": "0"
+                      },
+                      {
+                        "id": 6,
+                        "name": "Sub Accounts",
+                        "description": "Number of sub-accounts allowed for the supplier.",
+                        "type": "int",
+                        "key": "sub_accounts",
+                        "value": "1"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": "Record not found."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete a Subscription Plan",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Plan ID",
+            "required": true,
+            "example": "2",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": "Subscription plan deleted successfully."
+                }
+              }
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": "Record not found."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/subscriptions/features": {
+      "get": {
+        "summary": "List Features",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "key": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "description",
+                          "type",
+                          "key"
+                        ]
+                      }
+                    },
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "prev": {
+                          "type": "null"
+                        },
+                        "next": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "first",
+                        "last",
+                        "prev",
+                        "next"
+                      ]
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "from": {
+                          "type": "integer"
+                        },
+                        "last_page": {
+                          "type": "integer"
+                        },
+                        "links": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "active": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "url",
+                              "label",
+                              "active"
+                            ]
+                          }
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        },
+                        "to": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "current_page",
+                        "from",
+                        "last_page",
+                        "links",
+                        "path",
+                        "per_page",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "links",
+                    "meta"
+                  ]
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": 1,
+                      "name": "Unlimited Online Store",
+                      "description": "Allows the supplier to have unlimited products in their store.",
+                      "type": "bool",
+                      "key": "unlimited_store"
+                    },
+                    {
+                      "id": 2,
+                      "name": "Star Direct",
+                      "description": "Enables the Star Direct feature for suppliers.",
+                      "type": "bool",
+                      "key": "star_direct"
+                    },
+                    {
+                      "id": 3,
+                      "name": "Showcase Products Limit",
+                      "description": "Number of products allowed in Showcase.",
+                      "type": "int",
+                      "key": "showcase_limit"
+                    },
+                    {
+                      "id": 4,
+                      "name": "RFQs per Month",
+                      "description": "Number of RFQs allowed per month.",
+                      "type": "int",
+                      "key": "rfq_limit"
+                    },
+                    {
+                      "id": 5,
+                      "name": "Analytics Tools",
+                      "description": "Access to analytics tools for tracking performance.",
+                      "type": "bool",
+                      "key": "analytics_tools"
+                    },
+                    {
+                      "id": 6,
+                      "name": "Sub Accounts",
+                      "description": "Number of sub-accounts allowed for the supplier.",
+                      "type": "int",
+                      "key": "sub_accounts"
+                    },
+                    {
+                      "id": 7,
+                      "name": "Keyword Ad Budget",
+                      "description": "Amount of ad budget in USD.",
+                      "type": "decimal",
+                      "key": "ad_budget"
+                    },
+                    {
+                      "id": 8,
+                      "name": "Early RFQs",
+                      "description": "Get RFQs earlier than free users.",
+                      "type": "bool",
+                      "key": "early_rfq"
+                    },
+                    {
+                      "id": 9,
+                      "name": "Priority RFQ Access",
+                      "description": "Higher priority for RFQ responses.",
+                      "type": "bool",
+                      "key": "priority_rfq"
+                    },
+                    {
+                      "id": 10,
+                      "name": "Sponsored Ads",
+                      "description": "Allows sponsored ads for the supplier.",
+                      "type": "bool",
+                      "key": "sponsored_ads"
+                    },
+                    {
+                      "id": 11,
+                      "name": "Online Fairs Participation",
+                      "description": "Access to online fairs and exhibitions.",
+                      "type": "bool",
+                      "key": "online_fairs"
+                    },
+                    {
+                      "id": 12,
+                      "name": "Dedicated Training",
+                      "description": "Dedicated training sessions for the supplier.",
+                      "type": "bool",
+                      "key": "training"
+                    },
+                    {
+                      "id": 13,
+                      "name": "Monthly Service Reports",
+                      "description": "Monthly reports about supplier performance.",
+                      "type": "bool",
+                      "key": "monthly_report"
+                    },
+                    {
+                      "id": 14,
+                      "name": "Industry Report",
+                      "description": "Access to industry reports and insights.",
+                      "type": "bool",
+                      "key": "industry_report"
+                    },
+                    {
+                      "id": 15,
+                      "name": "Quarterly Consultation",
+                      "description": "Quarterly consultation sessions with experts.",
+                      "type": "bool",
+                      "key": "consultation"
+                    }
+                  ],
+                  "links": {
+                    "first": "https://adilbaba.test/api/v1/admin/subscriptions/features?page=1",
+                    "last": "https://adilbaba.test/api/v1/admin/subscriptions/features?page=2",
+                    "prev": null,
+                    "next": "https://adilbaba.test/api/v1/admin/subscriptions/features?page=2"
+                  },
+                  "meta": {
+                    "current_page": 1,
+                    "from": 1,
+                    "last_page": 2,
+                    "links": [
+                      {
+                        "url": null,
+                        "label": "&laquo; Previous",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/admin/subscriptions/features?page=1",
+                        "label": "1",
+                        "active": true
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/admin/subscriptions/features?page=2",
+                        "label": "2",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/admin/subscriptions/features?page=2",
+                        "label": "Next &raquo;",
+                        "active": false
+                      }
+                    ],
+                    "path": "https://adilbaba.test/api/v1/admin/subscriptions/features",
+                    "per_page": 15,
+                    "to": 15,
+                    "total": 17
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create a Feature",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": "{\r\n    \"name\": \"Full Support 24/7\",\r\n    \"description\": \"description of the feature\", // Nullable\r\n    \"type\": \"bool\" // bool || int || decimal\r\n}"
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "type",
+                        "key"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "message": "Feature created successfully.",
+                  "data": {
+                    "id": 1,
+                    "name": "Full Support 24/7",
+                    "description": "description of the feature",
+                    "type": "bool",
+                    "key": "full-support-247"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/subscriptions/features/{id}": {
+      "get": {
+        "summary": "Show Feature Details",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feature ID",
+            "required": true,
+            "example": "10",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "type",
+                        "key"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "example": {
+                  "data": {
+                    "id": 10,
+                    "name": "Sponsored Ads",
+                    "description": "Allows sponsored ads for the supplier.",
+                    "type": "bool",
+                    "key": "sponsored_ads"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": "Record not found."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update a Feature",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feature ID",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": "{\r\n    \"name\": \"Full Support 24/7\",\r\n    \"description\": \"description of the feature\", // Nullable\r\n    \"type\": \"bool\" // bool || int || decimal\r\n}"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "type",
+                        "key"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "message": "Feature updated successfully.",
+                  "data": {
+                    "id": 1,
+                    "name": "Full Support 24/7",
+                    "description": "description of the feature",
+                    "type": "bool",
+                    "key": "full-support-247"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": "Record not found."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete a Feature",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feature ID",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": "Feature deleted successfully."
+                }
+              }
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": "Record not found."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/subscriptions/memberships": {
+      "get": {
+        "summary": "List Memberships",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "active || expired || canceled || pending || suspended",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "company_id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "plan_id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "starts_at": {
+                            "type": "string"
+                          },
+                          "expires_at": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "string"
+                          },
+                          "updated_at": {
+                            "type": "string"
+                          },
+                          "company": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "founded_year": {
+                                "type": "integer"
+                              },
+                              "is_active": {
+                                "type": "boolean"
+                              },
+                              "verified_at": {
+                                "type": "string"
+                              },
+                              "location": {
+                                "type": "string"
+                              },
+                              "logo": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "description",
+                              "founded_year",
+                              "is_active",
+                              "verified_at",
+                              "location",
+                              "logo"
+                            ]
+                          },
+                          "subscriptionPlan": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "payment_rate": {
+                                "type": "string"
+                              },
+                              "duration_in_days": {
+                                "type": "string"
+                              },
+                              "price": {
+                                "type": "string"
+                              },
+                              "created_at": {
+                                "type": "string"
+                              },
+                              "updated_at": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "payment_rate",
+                              "duration_in_days",
+                              "price",
+                              "created_at",
+                              "updated_at"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "starts_at",
+                          "expires_at",
+                          "status",
+                          "created_at",
+                          "updated_at",
+                          "company",
+                          "subscriptionPlan"
+                        ]
+                      }
+                    },
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "prev": {
+                          "type": "null"
+                        },
+                        "next": {
+                          "type": "null"
+                        }
+                      },
+                      "required": [
+                        "first",
+                        "last",
+                        "prev",
+                        "next"
+                      ]
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "from": {
+                          "type": "integer"
+                        },
+                        "last_page": {
+                          "type": "integer"
+                        },
+                        "links": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "active": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "url",
+                              "label",
+                              "active"
+                            ]
+                          }
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        },
+                        "to": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "current_page",
+                        "from",
+                        "last_page",
+                        "links",
+                        "path",
+                        "per_page",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "links",
+                    "meta"
+                  ]
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": 1,
+                      "starts_at": "2025-10-28T00:00:00.000000Z",
+                      "expires_at": "2026-10-28T00:00:00.000000Z",
+                      "status": "active",
+                      "created_at": "2025-10-28T06:57:11.000000Z",
+                      "updated_at": "2025-10-28T06:57:11.000000Z",
+                      "company": {
+                        "id": 1,
+                        "name": "Cathryn Rau PhD",
+                        "description": "Aliquid dolorem in ex repellat officia. Dolor ut impedit ab recusandae et sit. Voluptatem et est pariatur impedit. Inventore animi ipsum perspiciatis voluptatibus.",
+                        "founded_year": 2016,
+                        "is_active": true,
+                        "verified_at": "2025-10-28T06:53:47.000000Z",
+                        "location": "Falkland Islands (Malvinas)",
+                        "logo": "https://adilbaba.test/storage/517/1.png"
+                      },
+                      "subscriptionPlan": {
+                        "id": 4,
+                        "name": "Premium",
+                        "payment_rate": "yearly",
+                        "duration_in_days": "365",
+                        "price": "1500.00",
+                        "created_at": "2025-10-28T06:57:11.000000Z",
+                        "updated_at": "2025-10-28T06:57:11.000000Z"
+                      }
+                    },
+                    {
+                      "id": 2,
+                      "starts_at": "2025-10-28T00:00:00.000000Z",
+                      "expires_at": "2026-10-28T00:00:00.000000Z",
+                      "status": "active",
+                      "created_at": "2025-10-28T06:57:11.000000Z",
+                      "updated_at": "2025-10-28T06:57:11.000000Z",
+                      "company": {
+                        "id": 2,
+                        "name": "Dr. Kelsie Daniel Jr.",
+                        "description": "Aspernatur minus suscipit quasi molestiae fuga quod. Esse libero ut cumque dolore. Quo vitae iste dolor omnis optio id officia. Non saepe qui ea ea sit velit porro consequuntur.",
+                        "founded_year": 2020,
+                        "is_active": true,
+                        "verified_at": "2025-10-28T06:53:47.000000Z",
+                        "location": "Namibia",
+                        "logo": "https://adilbaba.test/storage/518/3.png"
+                      },
+                      "subscriptionPlan": {
+                        "id": 4,
+                        "name": "Premium",
+                        "payment_rate": "yearly",
+                        "duration_in_days": "365",
+                        "price": "1500.00",
+                        "created_at": "2025-10-28T06:57:11.000000Z",
+                        "updated_at": "2025-10-28T06:57:11.000000Z"
+                      }
+                    },
+                    {
+                      "id": 3,
+                      "starts_at": "2025-10-28T00:00:00.000000Z",
+                      "expires_at": "2026-10-28T00:00:00.000000Z",
+                      "status": "active",
+                      "created_at": "2025-10-28T06:57:11.000000Z",
+                      "updated_at": "2025-10-28T06:57:11.000000Z",
+                      "company": {
+                        "id": 3,
+                        "name": "Hope Bosco",
+                        "description": "Molestiae placeat et sit commodi est soluta odio. Quaerat quia vel amet occaecati. Aut nobis vel ea voluptatem. Est porro error illum non odit et iste. Optio earum iste at vel.",
+                        "founded_year": 1995,
+                        "is_active": true,
+                        "verified_at": "2025-10-28T06:53:47.000000Z",
+                        "location": "Saint Barthelemy",
+                        "logo": "https://adilbaba.test/storage/519/1.png"
+                      },
+                      "subscriptionPlan": {
+                        "id": 4,
+                        "name": "Premium",
+                        "payment_rate": "yearly",
+                        "duration_in_days": "365",
+                        "price": "1500.00",
+                        "created_at": "2025-10-28T06:57:11.000000Z",
+                        "updated_at": "2025-10-28T06:57:11.000000Z"
+                      }
+                    },
+                    {
+                      "id": 4,
+                      "starts_at": "2025-10-28T00:00:00.000000Z",
+                      "expires_at": "2026-10-28T00:00:00.000000Z",
+                      "status": "active",
+                      "created_at": "2025-10-28T06:57:11.000000Z",
+                      "updated_at": "2025-10-28T06:57:11.000000Z",
+                      "company": {
+                        "id": 4,
+                        "name": "Vicenta Konopelski",
+                        "description": "Dolor eos occaecati inventore ratione eos. Aliquid quasi et animi voluptates.",
+                        "founded_year": 1991,
+                        "is_active": false,
+                        "verified_at": "2025-10-28T06:53:47.000000Z",
+                        "location": "Nepal",
+                        "logo": "https://adilbaba.test/storage/520/4.png"
+                      },
+                      "subscriptionPlan": {
+                        "id": 4,
+                        "name": "Premium",
+                        "payment_rate": "yearly",
+                        "duration_in_days": "365",
+                        "price": "1500.00",
+                        "created_at": "2025-10-28T06:57:11.000000Z",
+                        "updated_at": "2025-10-28T06:57:11.000000Z"
+                      }
+                    },
+                    {
+                      "id": 5,
+                      "starts_at": "2025-10-28T00:00:00.000000Z",
+                      "expires_at": "2026-10-28T00:00:00.000000Z",
+                      "status": "active",
+                      "created_at": "2025-10-28T06:57:11.000000Z",
+                      "updated_at": "2025-10-28T06:57:11.000000Z",
+                      "company": {
+                        "id": 5,
+                        "name": "Ms. Angelina Metz",
+                        "description": "Aliquid occaecati sint corrupti ea necessitatibus maxime. Quaerat tempora eum eum maiores nostrum sunt. Excepturi ad eos quas nisi.",
+                        "founded_year": 2020,
+                        "is_active": false,
+                        "verified_at": "2025-10-28T06:53:47.000000Z",
+                        "location": "Turks and Caicos Islands",
+                        "logo": "https://adilbaba.test/storage/521/3.png"
+                      },
+                      "subscriptionPlan": {
+                        "id": 4,
+                        "name": "Premium",
+                        "payment_rate": "yearly",
+                        "duration_in_days": "365",
+                        "price": "1500.00",
+                        "created_at": "2025-10-28T06:57:11.000000Z",
+                        "updated_at": "2025-10-28T06:57:11.000000Z"
+                      }
+                    }
+                  ],
+                  "links": {
+                    "first": "https://adilbaba.test/api/v1/admin/subscriptions/memberships?page=1",
+                    "last": "https://adilbaba.test/api/v1/admin/subscriptions/memberships?page=1",
+                    "prev": null,
+                    "next": null
+                  },
+                  "meta": {
+                    "current_page": 1,
+                    "from": 1,
+                    "last_page": 1,
+                    "links": [
+                      {
+                        "url": null,
+                        "label": "&laquo; Previous",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/admin/subscriptions/memberships?page=1",
+                        "label": "1",
+                        "active": true
+                      },
+                      {
+                        "url": null,
+                        "label": "Next &raquo;",
+                        "active": false
+                      }
+                    ],
+                    "path": "https://adilbaba.test/api/v1/admin/subscriptions/memberships",
+                    "per_page": 15,
+                    "to": 5,
+                    "total": 5
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create Membership",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": {
+                "company_id": 1,
+                "subscription_plan_id": 2,
+                "starts_at": "2025-12-30",
+                "expires_at": "2026-12-30"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "starts_at": {
+                          "type": "string"
+                        },
+                        "expires_at": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "company": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "founded_year": {
+                              "type": "integer"
+                            },
+                            "is_active": {
+                              "type": "boolean"
+                            },
+                            "verified_at": {
+                              "type": "string"
+                            },
+                            "location": {
+                              "type": "string"
+                            },
+                            "logo": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "description",
+                            "founded_year",
+                            "is_active",
+                            "verified_at",
+                            "location",
+                            "logo"
+                          ]
+                        },
+                        "subscriptionPlan": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "payment_rate": {
+                              "type": "string"
+                            },
+                            "duration_in_days": {
+                              "type": "string"
+                            },
+                            "price": {
+                              "type": "string"
+                            },
+                            "created_at": {
+                              "type": "string"
+                            },
+                            "updated_at": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "payment_rate",
+                            "duration_in_days",
+                            "price",
+                            "created_at",
+                            "updated_at"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "starts_at",
+                        "expires_at",
+                        "status",
+                        "created_at",
+                        "updated_at",
+                        "company",
+                        "subscriptionPlan"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "message": "Membership created successfully.",
+                  "data": {
+                    "id": 6,
+                    "starts_at": "2025-12-30T00:00:00.000000Z",
+                    "expires_at": "2026-12-30T00:00:00.000000Z",
+                    "status": "active",
+                    "created_at": "2025-10-28T08:24:24.000000Z",
+                    "updated_at": "2025-10-28T08:24:24.000000Z",
+                    "company": {
+                      "id": 1,
+                      "name": "Cathryn Rau PhD",
+                      "description": "Aliquid dolorem in ex repellat officia. Dolor ut impedit ab recusandae et sit. Voluptatem et est pariatur impedit. Inventore animi ipsum perspiciatis voluptatibus.",
+                      "founded_year": 2016,
+                      "is_active": true,
+                      "verified_at": "2025-10-28T06:53:47.000000Z",
+                      "location": "Falkland Islands (Malvinas)",
+                      "logo": "https://adilbaba.test/storage/517/1.png"
+                    },
+                    "subscriptionPlan": {
+                      "id": 2,
+                      "name": "Plus",
+                      "payment_rate": "yearly",
+                      "duration_in_days": "365",
+                      "price": "900.00",
+                      "created_at": "2025-10-28T06:57:11.000000Z",
+                      "updated_at": "2025-10-28T06:57:11.000000Z"
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/subscriptions/memberships/{id}": {
+      "get": {
+        "summary": "Show Membership Details",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "starts_at": {
+                          "type": "string"
+                        },
+                        "expires_at": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "company": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "founded_year": {
+                              "type": "integer"
+                            },
+                            "is_active": {
+                              "type": "boolean"
+                            },
+                            "verified_at": {
+                              "type": "string"
+                            },
+                            "location": {
+                              "type": "string"
+                            },
+                            "logo": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "description",
+                            "founded_year",
+                            "is_active",
+                            "verified_at",
+                            "location",
+                            "logo"
+                          ]
+                        },
+                        "subscriptionPlan": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "payment_rate": {
+                              "type": "string"
+                            },
+                            "duration_in_days": {
+                              "type": "string"
+                            },
+                            "price": {
+                              "type": "string"
+                            },
+                            "created_at": {
+                              "type": "string"
+                            },
+                            "updated_at": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "payment_rate",
+                            "duration_in_days",
+                            "price",
+                            "created_at",
+                            "updated_at"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "starts_at",
+                        "expires_at",
+                        "status",
+                        "created_at",
+                        "updated_at",
+                        "company",
+                        "subscriptionPlan"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "example": {
+                  "data": {
+                    "id": 1,
+                    "starts_at": "2025-10-28T00:00:00.000000Z",
+                    "expires_at": "2026-10-28T00:00:00.000000Z",
+                    "status": "active",
+                    "created_at": "2025-10-28T06:57:11.000000Z",
+                    "updated_at": "2025-10-28T06:57:11.000000Z",
+                    "company": {
+                      "id": 1,
+                      "name": "Cathryn Rau PhD",
+                      "description": "Aliquid dolorem in ex repellat officia. Dolor ut impedit ab recusandae et sit. Voluptatem et est pariatur impedit. Inventore animi ipsum perspiciatis voluptatibus.",
+                      "founded_year": 2016,
+                      "is_active": true,
+                      "verified_at": "2025-10-28T06:53:47.000000Z",
+                      "location": "Falkland Islands (Malvinas)",
+                      "logo": "https://adilbaba.test/storage/517/1.png"
+                    },
+                    "subscriptionPlan": {
+                      "id": 4,
+                      "name": "Premium",
+                      "payment_rate": "yearly",
+                      "duration_in_days": "365",
+                      "price": "1500.00",
+                      "created_at": "2025-10-28T06:57:11.000000Z",
+                      "updated_at": "2025-10-28T06:57:11.000000Z"
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update Membership",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "6",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": "{\r\n    \"subscription_plan_id\": 2,\r\n    \"starts_at\": \"2025-12-30\",\r\n    \"expires_at\": \"2026-12-30\",\r\n    \"status\": \"active\" // active || expired || canceled || pending || suspended\r\n}"
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "starts_at": {
+                          "type": "string"
+                        },
+                        "expires_at": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "company": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "founded_year": {
+                              "type": "integer"
+                            },
+                            "is_active": {
+                              "type": "boolean"
+                            },
+                            "verified_at": {
+                              "type": "string"
+                            },
+                            "location": {
+                              "type": "string"
+                            },
+                            "logo": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "description",
+                            "founded_year",
+                            "is_active",
+                            "verified_at",
+                            "location",
+                            "logo"
+                          ]
+                        },
+                        "subscriptionPlan": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "payment_rate": {
+                              "type": "string"
+                            },
+                            "duration_in_days": {
+                              "type": "string"
+                            },
+                            "price": {
+                              "type": "string"
+                            },
+                            "created_at": {
+                              "type": "string"
+                            },
+                            "updated_at": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "payment_rate",
+                            "duration_in_days",
+                            "price",
+                            "created_at",
+                            "updated_at"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "starts_at",
+                        "expires_at",
+                        "status",
+                        "created_at",
+                        "updated_at",
+                        "company",
+                        "subscriptionPlan"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "message": "Membership updated successfully.",
+                  "data": {
+                    "id": 6,
+                    "starts_at": "2025-12-30T00:00:00.000000Z",
+                    "expires_at": "2026-12-30T00:00:00.000000Z",
+                    "status": "active",
+                    "created_at": "2025-10-28T08:24:24.000000Z",
+                    "updated_at": "2025-10-28T08:24:24.000000Z",
+                    "company": {
+                      "id": 1,
+                      "name": "Cathryn Rau PhD",
+                      "description": "Aliquid dolorem in ex repellat officia. Dolor ut impedit ab recusandae et sit. Voluptatem et est pariatur impedit. Inventore animi ipsum perspiciatis voluptatibus.",
+                      "founded_year": 2016,
+                      "is_active": true,
+                      "verified_at": "2025-10-28T06:53:47.000000Z",
+                      "location": "Falkland Islands (Malvinas)",
+                      "logo": "https://adilbaba.test/storage/517/1.png"
+                    },
+                    "subscriptionPlan": {
+                      "id": 2,
+                      "name": "Plus",
+                      "payment_rate": "yearly",
+                      "duration_in_days": "365",
+                      "price": "900.00",
+                      "created_at": "2025-10-28T06:57:11.000000Z",
+                      "updated_at": "2025-10-28T06:57:11.000000Z"
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Membership",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": "Membership deleted successfully."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "servers": [],
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
+}

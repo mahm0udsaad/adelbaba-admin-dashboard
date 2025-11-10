@@ -170,7 +170,7 @@ export default function RequestDialog({ id, open, onOpenChange, onUpdated, updat
           <div>
             <Label htmlFor="reason">السبب</Label>
             <Textarea id="reason" value={reason} onChange={(e) => setReason(e.target.value)} placeholder="اكتب الملاحظات هنا" />
-            <div className="text-xs text-muted-foreground text-left">{reason.length}/500</div>
+            <div className="text-xs text-muted-foreground text-right">{reason.length}/500</div>
           </div>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>إلغاء</Button>

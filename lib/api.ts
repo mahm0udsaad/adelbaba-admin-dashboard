@@ -98,11 +98,14 @@ export const apiService = {
   deleteTicket: (id: number) => api.delete(`/support-tickets/${id}`),
 
   // Subscriptions
-  fetchPlans: () => api.get("/subscriptions/plans"),
-  fetchPlan: (id: number) => api.get(`/subscriptions/plans/${id}`),
+  fetchPlans: (params?: { page?: number; per_page?: number; search?: string }) =>
+    api.get("/subscriptions/plans", { params }),
+  fetchPlan: (id: number | string) => api.get(`/subscriptions/plans/${id}`),
   createPlan: (data: any) => api.post("/subscriptions/plans", data),
-  updatePlan: (id: number, data: any) => api.put(`/subscriptions/plans/${id}`, data),
-  fetchFeatures: () => api.get("/subscriptions/features"),
+  updatePlan: (id: number | string, data: any) => api.put(`/subscriptions/plans/${id}`, data),
+  deletePlan: (id: number | string) => api.delete(`/subscriptions/plans/${id}`),
+  fetchFeatures: (params?: { page?: number; per_page?: number; search?: string }) =>
+    api.get("/subscriptions/features", { params }),
   fetchFeature: (id: number) => api.get(`/subscriptions/features/${id}`),
   createFeature: (data: { name: string }) => api.post("/subscriptions/features", data),
   updateFeature: (id: number, data: { name: string }) => api.put(`/subscriptions/features/${id}`, data),
