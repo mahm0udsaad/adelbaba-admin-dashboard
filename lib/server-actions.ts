@@ -24,7 +24,7 @@ function hasValidationErrors(payload: any): boolean {
   return Boolean(errors)
 }
 
-function buildLogoutRedirect(targetPath = "/") {
+function buildLogoutRedirect(targetPath = "/?session=expired") {
   const params = new URLSearchParams({ redirect: targetPath })
   return `/api/auth/logout?${params.toString()}`
 }
