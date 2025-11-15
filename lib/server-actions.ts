@@ -24,6 +24,11 @@ function hasValidationErrors(payload: any): boolean {
   return Boolean(errors)
 }
 
+function buildLogoutRedirect(targetPath = "/") {
+  const params = new URLSearchParams({ redirect: targetPath })
+  return `/api/auth/logout?${params.toString()}`
+}
+
 async function fetchWithAuth(path: string, params?: Record<string, any>) {
   const token = await getAuthTokenFromCookies()
   const url = new URL(`${BASE_URL}${path}`)
@@ -45,8 +50,7 @@ async function fetchWithAuth(path: string, params?: Record<string, any>) {
   })
 
   if (res.status === 401 || res.status === 403) {
-    await clearAuthToken()
-    redirect("/")
+    redirect(buildLogoutRedirect())
   }
   if (res.status === 422) {
     const err = await res
@@ -54,8 +58,7 @@ async function fetchWithAuth(path: string, params?: Record<string, any>) {
       .catch(() => ({}))
 
     if (!hasValidationErrors(err)) {
-      await clearAuthToken()
-      redirect("/")
+      redirect(buildLogoutRedirect())
     }
     throw new Error(err?.message || "Validation error")
   }
@@ -338,14 +341,12 @@ export async function updateVerificationRequest(
   })
 
   if (res.status === 401 || res.status === 403) {
-    await clearAuthToken()
-    redirect("/")
+    redirect(buildLogoutRedirect())
   }
   if (res.status === 422) {
     const err = await res.json().catch(() => ({}))
     if (!hasValidationErrors(err)) {
-      await clearAuthToken()
-      redirect("/")
+      redirect(buildLogoutRedirect())
     }
     throw new Error(err?.message || "Validation error")
   }

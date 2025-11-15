@@ -31,6 +31,16 @@ function shouldForceLogout(status?: number, data?: any): boolean {
   return false
 }
 
+async function clearClientSession() {
+  localStorage.removeItem("admin_token")
+  localStorage.removeItem("authToken")
+  try {
+    await fetch("/api/auth/logout", { method: "POST" })
+  } catch (error) {
+    console.warn("[v0] Failed to clear server auth cookie", error)
+  }
+}
+
 api.interceptors.request.use((config) => {
   // Prefer admin_token per guide, fallback to authToken for compatibility
   const token = localStorage.getItem("admin_token") || localStorage.getItem("authToken")
@@ -53,7 +63,7 @@ api.interceptors.response.use(
     console.log("[v0] API Response success:", response.status, response.config.url)
     return response
   },
-  (error) => {
+  async (error) => {
     const status = error.response?.status
     const data = error.response?.data
     console.log("[v0] API Error:", status, error.config?.url)
@@ -61,8 +71,7 @@ api.interceptors.response.use(
 
     if (shouldForceLogout(status, data)) {
       console.log("[v0] Unauthorized or invalid token - clearing token and redirecting to login")
-      localStorage.removeItem("admin_token")
-      localStorage.removeItem("authToken")
+      await clearClientSession()
       if (window.location.pathname !== "/") {
         window.location.href = "/"
       }
