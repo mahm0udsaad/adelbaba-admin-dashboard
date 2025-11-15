@@ -1,13 +1,21 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { LoginForm } from "@/components/login-form"
 
-export default function Page() {
+function LoadingScreen() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-50">
+      <div className="text-amber-800">جارٍ التحميل...</div>
+    </div>
+  )
+}
+
+function LoginGate() {
   const router = useRouter()
-  const [checking, setChecking] = useState(true)
   const searchParams = useSearchParams()
+  const [checking, setChecking] = useState(true)
   const redirectParam = searchParams?.get("redirect")
   const sessionParam = searchParams?.get("session")
   const forcedRedirect = Boolean(redirectParam) || sessionParam === "expired"
@@ -31,12 +39,16 @@ export default function Page() {
   }, [forcedRedirect, nextPath, router])
 
   if (checking) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-50">
-        <div className="text-amber-800">جارٍ التحميل...</div>
-      </div>
-    )
+    return <LoadingScreen />
   }
 
   return <LoginForm onLoginSuccess={() => router.replace(nextPath)} />
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<LoadingScreen />}>
+      <LoginGate />
+    </Suspense>
+  )
 }
