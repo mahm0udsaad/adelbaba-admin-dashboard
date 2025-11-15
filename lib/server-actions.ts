@@ -1,6 +1,7 @@
 "use server"
 
 import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 
 const BASE_URL =
   process.env.ADMIN_API_URL ??
@@ -10,6 +11,17 @@ const BASE_URL =
 async function getAuthTokenFromCookies(): Promise<string | undefined> {
   const store = await cookies()
   return store.get("authToken")?.value
+}
+
+function hasValidationErrors(payload: any): boolean {
+  if (!payload || typeof payload !== "object") return false
+  const errors = (payload as any).errors
+  if (!errors) return false
+  if (Array.isArray(errors)) return errors.length > 0
+  if (typeof errors === "object") {
+    return Object.keys(errors).length > 0
+  }
+  return Boolean(errors)
 }
 
 async function fetchWithAuth(path: string, params?: Record<string, any>) {
@@ -32,6 +44,21 @@ async function fetchWithAuth(path: string, params?: Record<string, any>) {
     cache: "no-store",
   })
 
+  if (res.status === 401 || res.status === 403) {
+    await clearAuthToken()
+    redirect("/")
+  }
+  if (res.status === 422) {
+    const err = await res
+      .json()
+      .catch(() => ({}))
+
+    if (!hasValidationErrors(err)) {
+      await clearAuthToken()
+      redirect("/")
+    }
+    throw new Error(err?.message || "Validation error")
+  }
   if (!res.ok) {
     const text = await res.text().catch(() => "")
     throw new Error(`Request failed ${res.status}: ${text}`)
@@ -311,10 +338,15 @@ export async function updateVerificationRequest(
   })
 
   if (res.status === 401 || res.status === 403) {
-    throw new Error("Session expired. Please login again.")
+    await clearAuthToken()
+    redirect("/")
   }
   if (res.status === 422) {
     const err = await res.json().catch(() => ({}))
+    if (!hasValidationErrors(err)) {
+      await clearAuthToken()
+      redirect("/")
+    }
     throw new Error(err?.message || "Validation error")
   }
   if (!res.ok) {

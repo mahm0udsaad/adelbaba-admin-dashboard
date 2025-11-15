@@ -13,6 +13,24 @@ const api = axios.create({
   },
 })
 
+function hasValidationErrors(payload: any): boolean {
+  if (!payload || typeof payload !== "object") return false
+  const errors = (payload as any).errors
+  if (!errors) return false
+  if (Array.isArray(errors)) return errors.length > 0
+  if (typeof errors === "object") {
+    return Object.keys(errors).length > 0
+  }
+  return Boolean(errors)
+}
+
+function shouldForceLogout(status?: number, data?: any): boolean {
+  if (!status) return false
+  if (status === 401 || status === 403) return true
+  if (status === 422 && !hasValidationErrors(data)) return true
+  return false
+}
+
 api.interceptors.request.use((config) => {
   // Prefer admin_token per guide, fallback to authToken for compatibility
   const token = localStorage.getItem("admin_token") || localStorage.getItem("authToken")
@@ -36,11 +54,13 @@ api.interceptors.response.use(
     return response
   },
   (error) => {
-    console.log("[v0] API Error:", error.response?.status, error.config?.url)
-    console.log("[v0] Error details:", error.response?.data)
+    const status = error.response?.status
+    const data = error.response?.data
+    console.log("[v0] API Error:", status, error.config?.url)
+    console.log("[v0] Error details:", data)
 
-    if (error.response?.status === 401 || error.response?.status === 403) {
-      console.log("[v0] Unauthorized - clearing token and redirecting to login")
+    if (shouldForceLogout(status, data)) {
+      console.log("[v0] Unauthorized or invalid token - clearing token and redirecting to login")
       localStorage.removeItem("admin_token")
       localStorage.removeItem("authToken")
       if (window.location.pathname !== "/") {
