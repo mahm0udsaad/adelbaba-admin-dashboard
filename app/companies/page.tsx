@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic"
 
 export default async function CompaniesRoutePage() {
   const companies = await getCompanies()
+  console.log(companies[0])
   return (
     <Suspense
       fallback={

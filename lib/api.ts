@@ -200,6 +200,41 @@ export const apiService = {
     page?: number
   }) => api.get("/companies/requests", { params }),
   fetchVerificationRequest: (id: number) => api.get(`/companies/requests/${id}`),
+
+  // Sections
+  fetchSections: (params?: { page?: number; per_page?: number; search?: string }) =>
+    api.get("/sections", { params }),
+  fetchSection: (id: number) => api.get(`/sections/${id}`),
+  createSection: (data: {
+    title: string
+    type: "new" | "best_selling" | "popular" | "category"
+    category_id?: number
+    is_active: boolean
+  }) => api.post("/sections", data),
+  updateSection: (
+    id: number,
+    data: {
+      title: string
+      type: "new" | "best_selling" | "popular" | "category"
+      category_id?: number
+      is_active: boolean
+    }
+  ) => api.put(`/sections/${id}`, data),
+  deleteSection: (id: number) => api.delete(`/sections/${id}`),
+
+  // Orders
+  fetchOrders: (params?: {
+    page?: number
+    per_page?: number
+    payment_status?: string
+    shipment_status?: string
+    sort?: "asc" | "desc"
+  }) => api.get("/orders", { params }),
+  fetchOrder: (id: number) => api.get(`/orders/${id}`),
+  
+  // Payments
+  fetchPayments: (params?: { page?: number; per_page?: number; status?: string; sort?: "asc" | "desc" }) =>
+    api.get("/orders/payments", { params }),
 }
 
 export default api

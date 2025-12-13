@@ -1,0 +1,740 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Default module",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [],
+  "paths": {
+    "/api/v1/admin/orders": {
+      "get": {
+        "summary": "List Orders",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "payment_status",
+            "in": "query",
+            "description": "pending || processing || completed || failed || cancelled || refunded || expired",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "shipment_status",
+            "in": "query",
+            "description": "pending || processing || shipped|| in_transit || out_for_delivery || delivered || failed_delivery || returned || cancelled",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "default = 15",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "sort by date, desc || asc. default = desc",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/orders/{id}": {
+      "get": {
+        "summary": "Show Order Details",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/company/orders": {
+      "post": {
+        "summary": "Create Order",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": "{\r\n    \"order\": {\r\n        \"user_id\": 123,\r\n        \"notes\": \"Custom blue color with gold trim\", // Nullable\r\n        \"shipping\": 15.00, // Nullable\r\n        \"tax\": 8.50, // Nullable\r\n        \"expires_at\": \"2025-10-30\", // Required\r\n    },\r\n    \"items\": [\r\n        {\r\n            \"product_id\": 1,\r\n            \"sku_id\": 2,\r\n            \"quantity\": 5,\r\n            \"price_per_unit\": 29.99,\r\n            \"customization\": \"Blue color, gold trim\"\r\n        }\r\n    ]\r\n}"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/company/orders/{id}/invoice": {
+      "get": {
+        "summary": "Download Invoice",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/company/orders/payments": {
+      "get": {
+        "summary": "List Payments",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "pending || processing || completed || failed || cancelled || refunded || expired",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "default = 15",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "sort by date, desc || asc. default = desc",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "currency": {
+                            "type": "string"
+                          },
+                          "amount": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "provider": {
+                            "type": "string"
+                          },
+                          "payment_number": {
+                            "type": "string"
+                          },
+                          "updated_at": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "string"
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "picture": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "phone": {
+                                "type": "string"
+                              },
+                              "has_company": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "picture",
+                              "email",
+                              "phone",
+                              "has_company"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "currency",
+                          "amount",
+                          "status",
+                          "provider",
+                          "payment_number",
+                          "updated_at",
+                          "created_at",
+                          "user"
+                        ]
+                      }
+                    },
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "prev": {
+                          "type": "null"
+                        },
+                        "next": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "first",
+                        "last",
+                        "prev",
+                        "next"
+                      ]
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "from": {
+                          "type": "integer"
+                        },
+                        "last_page": {
+                          "type": "integer"
+                        },
+                        "links": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "active": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "url",
+                              "label",
+                              "active"
+                            ]
+                          }
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        },
+                        "to": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "current_page",
+                        "from",
+                        "last_page",
+                        "links",
+                        "path",
+                        "per_page",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "links",
+                    "meta"
+                  ]
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": 9,
+                      "currency": "GBP",
+                      "amount": "924.00",
+                      "status": "processing",
+                      "provider": "stripe",
+                      "payment_number": "PAY-8674-icfs",
+                      "updated_at": "2025-10-12T23:06:43.000000Z",
+                      "created_at": "2025-10-12T23:06:43.000000Z",
+                      "user": {
+                        "id": 282,
+                        "name": "Davion Johnston",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "lurline.conroy@example.org",
+                        "phone": "214-438-0385",
+                        "has_company": false
+                      }
+                    },
+                    {
+                      "id": 10,
+                      "currency": "GEL",
+                      "amount": "3765.00",
+                      "status": "processing",
+                      "provider": "stripe",
+                      "payment_number": "PAY-5168-dxsv",
+                      "updated_at": "2025-10-12T23:06:43.000000Z",
+                      "created_at": "2025-10-12T23:06:43.000000Z",
+                      "user": {
+                        "id": 227,
+                        "name": "Jordi Yundt",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "aluettgen@example.net",
+                        "phone": "+1 (305) 855-2180",
+                        "has_company": false
+                      }
+                    },
+                    {
+                      "id": 11,
+                      "currency": "TOP",
+                      "amount": "12662.00",
+                      "status": "expired",
+                      "provider": "stripe",
+                      "payment_number": "PAY-2463-llgf",
+                      "updated_at": "2025-10-12T23:06:43.000000Z",
+                      "created_at": "2025-10-12T23:06:43.000000Z",
+                      "user": {
+                        "id": 26,
+                        "name": "Jan Macejkovic",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "efay@example.net",
+                        "phone": "+1-940-970-6936",
+                        "has_company": false
+                      }
+                    },
+                    {
+                      "id": 12,
+                      "currency": "XCD",
+                      "amount": "9350.00",
+                      "status": "cancelled",
+                      "provider": "paypal",
+                      "payment_number": "PAY-9457-lmps",
+                      "updated_at": "2025-10-12T23:06:43.000000Z",
+                      "created_at": "2025-10-12T23:06:43.000000Z",
+                      "user": {
+                        "id": 107,
+                        "name": "Mr. Ricky Runte",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "weimann.delaney@example.org",
+                        "phone": "480.926.6201",
+                        "has_company": false
+                      }
+                    },
+                    {
+                      "id": 13,
+                      "currency": "SAR",
+                      "amount": "13610.00",
+                      "status": "processing",
+                      "provider": "paypal",
+                      "payment_number": "PAY-2857-wpiv",
+                      "updated_at": "2025-10-12T23:06:43.000000Z",
+                      "created_at": "2025-10-12T23:06:43.000000Z",
+                      "user": {
+                        "id": 333,
+                        "name": "Kiley D'Amore",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "upton.helene@example.com",
+                        "phone": "1-313-780-3663",
+                        "has_company": false
+                      }
+                    },
+                    {
+                      "id": 14,
+                      "currency": "AED",
+                      "amount": "18260.00",
+                      "status": "failed",
+                      "provider": "paymob",
+                      "payment_number": "PAY-7072-qffg",
+                      "updated_at": "2025-10-12T23:06:43.000000Z",
+                      "created_at": "2025-10-12T23:06:43.000000Z",
+                      "user": {
+                        "id": 456,
+                        "name": "Ms. Summer Pollich IV",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "velma.paucek@example.org",
+                        "phone": "(757) 507-0805",
+                        "has_company": true
+                      }
+                    },
+                    {
+                      "id": 15,
+                      "currency": "FKP",
+                      "amount": "20609.00",
+                      "status": "completed",
+                      "provider": "paypal",
+                      "payment_number": "PAY-7840-kpvm",
+                      "updated_at": "2025-10-12T23:06:43.000000Z",
+                      "created_at": "2025-10-12T23:06:43.000000Z",
+                      "user": {
+                        "id": 43,
+                        "name": "Esmeralda Hudson",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "sydnie31@example.net",
+                        "phone": "1-541-616-9642",
+                        "has_company": false
+                      }
+                    },
+                    {
+                      "id": 16,
+                      "currency": "AWG",
+                      "amount": "11419.00",
+                      "status": "failed",
+                      "provider": "stripe",
+                      "payment_number": "PAY-2387-wrzy",
+                      "updated_at": "2025-10-12T23:06:44.000000Z",
+                      "created_at": "2025-10-12T23:06:43.000000Z",
+                      "user": {
+                        "id": 553,
+                        "name": "Jerad Wilkinson",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "ypagac@example.com",
+                        "phone": "661.932.5586",
+                        "has_company": true
+                      }
+                    },
+                    {
+                      "id": 17,
+                      "currency": "EUR",
+                      "amount": "11466.00",
+                      "status": "cancelled",
+                      "provider": "paypal",
+                      "payment_number": "PAY-7341-uhti",
+                      "updated_at": "2025-10-12T23:06:44.000000Z",
+                      "created_at": "2025-10-12T23:06:43.000000Z",
+                      "user": {
+                        "id": 433,
+                        "name": "Kennith Yundt",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "conner.abernathy@example.net",
+                        "phone": "417-940-8744",
+                        "has_company": false
+                      }
+                    },
+                    {
+                      "id": 18,
+                      "currency": "LAK",
+                      "amount": "206.00",
+                      "status": "failed",
+                      "provider": "stripe",
+                      "payment_number": "PAY-7236-yzfv",
+                      "updated_at": "2025-10-12T23:06:44.000000Z",
+                      "created_at": "2025-10-12T23:06:43.000000Z",
+                      "user": {
+                        "id": 48,
+                        "name": "Ayden Schowalter Sr.",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "alize77@example.com",
+                        "phone": "732.478.1676",
+                        "has_company": false
+                      }
+                    },
+                    {
+                      "id": 19,
+                      "currency": "THB",
+                      "amount": "15604.00",
+                      "status": "refunded",
+                      "provider": "stripe",
+                      "payment_number": "PAY-5254-fliw",
+                      "updated_at": "2025-10-12T23:06:44.000000Z",
+                      "created_at": "2025-10-12T23:06:43.000000Z",
+                      "user": {
+                        "id": 5,
+                        "name": "Test 5 User",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "test5@example.com",
+                        "phone": "320-779-5387",
+                        "has_company": true
+                      }
+                    },
+                    {
+                      "id": 20,
+                      "currency": "IRR",
+                      "amount": "14908.00",
+                      "status": "expired",
+                      "provider": "paymob",
+                      "payment_number": "PAY-6880-rfww",
+                      "updated_at": "2025-10-12T23:06:44.000000Z",
+                      "created_at": "2025-10-12T23:06:43.000000Z",
+                      "user": {
+                        "id": 214,
+                        "name": "Alayna Hackett",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "drowe@example.com",
+                        "phone": "1-678-354-0817",
+                        "has_company": false
+                      }
+                    },
+                    {
+                      "id": 1,
+                      "currency": "CAD",
+                      "amount": "13334.00",
+                      "status": "processing",
+                      "provider": "stripe",
+                      "payment_number": "PAY-4854-xded",
+                      "updated_at": "2025-10-12T23:06:43.000000Z",
+                      "created_at": "2025-10-12T23:06:42.000000Z",
+                      "user": {
+                        "id": 63,
+                        "name": "Sheridan Reichel I",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "cabshire@example.org",
+                        "phone": "+1 (856) 367-0779",
+                        "has_company": false
+                      }
+                    },
+                    {
+                      "id": 2,
+                      "currency": "PGK",
+                      "amount": "15447.00",
+                      "status": "expired",
+                      "provider": "paypal",
+                      "payment_number": "PAY-7124-gklq",
+                      "updated_at": "2025-10-12T23:06:43.000000Z",
+                      "created_at": "2025-10-12T23:06:42.000000Z",
+                      "user": {
+                        "id": 345,
+                        "name": "Autumn Jakubowski",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "rita.roberts@example.com",
+                        "phone": "1-518-218-5650",
+                        "has_company": false
+                      }
+                    },
+                    {
+                      "id": 3,
+                      "currency": "HTG",
+                      "amount": "4354.00",
+                      "status": "refunded",
+                      "provider": "paymob",
+                      "payment_number": "PAY-0966-fulf",
+                      "updated_at": "2025-10-12T23:06:43.000000Z",
+                      "created_at": "2025-10-12T23:06:42.000000Z",
+                      "user": {
+                        "id": 80,
+                        "name": "Penelope Feest",
+                        "picture": "https://placehold.co/200/png?text=No+Image",
+                        "email": "mann.nichole@example.com",
+                        "phone": "682-392-6224",
+                        "has_company": false
+                      }
+                    }
+                  ],
+                  "links": {
+                    "first": "https://adilbaba.test/api/v1/company/orders/payments?page=1",
+                    "last": "https://adilbaba.test/api/v1/company/orders/payments?page=2",
+                    "prev": null,
+                    "next": "https://adilbaba.test/api/v1/company/orders/payments?page=2"
+                  },
+                  "meta": {
+                    "current_page": 1,
+                    "from": 1,
+                    "last_page": 2,
+                    "links": [
+                      {
+                        "url": null,
+                        "label": "&laquo; Previous",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/company/orders/payments?page=1",
+                        "label": "1",
+                        "active": true
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/company/orders/payments?page=2",
+                        "label": "2",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/company/orders/payments?page=2",
+                        "label": "Next &raquo;",
+                        "active": false
+                      }
+                    ],
+                    "path": "https://adilbaba.test/api/v1/company/orders/payments",
+                    "per_page": 15,
+                    "to": 15,
+                    "total": 20
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "responses": {},
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "servers": [],
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
+}

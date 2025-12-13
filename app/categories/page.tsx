@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { CategoriesPage } from "@/components/dashboard/categories-page"
+import { CategoriesManagementPage } from "@/components/dashboard/categories-management-page"
 import { Loader2 } from "lucide-react"
 import { getCategories } from "@/lib/server-actions"
 
@@ -12,12 +12,11 @@ export default async function CategoriesRoutePage() {
       fallback={
         <div className="flex items-center justify-center p-8">
           <Loader2 className="h-8 w-8 animate-spin text-amber-600" />
-          <span className="mr-2 rtl:ml-2 text-amber-800">جاري تحميل التصنيفات...</span>
+          <span className="mr-2 rtl:ml-2 text-amber-800">جاري تحميل الفئات...</span>
         </div>
       }
     >
-      <CategoriesPage initialCategories={categories} />
+      <CategoriesManagementPage initialCategories={categories} />
     </Suspense>
   )
 }
-

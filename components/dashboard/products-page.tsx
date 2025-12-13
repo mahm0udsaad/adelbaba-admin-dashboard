@@ -6,12 +6,13 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Search, MoreHorizontal, Loader2 } from "lucide-react"
+import { Search, MoreHorizontal, Loader2, Eye } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { apiService } from "@/lib/api"
+import Link from "next/link"
 
 type ProductUnit = string | { id?: number; name?: string }
 
@@ -268,8 +269,12 @@ export function ProductsPage({ initialProducts }: { initialProducts?: Product[] 
           </TableHeader>
           <TableBody>
             {filtered.map((p) => (
-              <TableRow key={p.id}>
-                <TableCell className="font-medium">{p.name}</TableCell>
+              <TableRow key={p.id} className="cursor-pointer" onClick={() => (window.location.href = `/products/${p.id}`)}>
+                <TableCell className="font-medium">
+                  <Link href={`/products/${p.id}`} className="hover:underline" onClick={(e) => e.stopPropagation()}>
+                    {p.name}
+                  </Link>
+                </TableCell>
                 <TableCell className="max-w-xs truncate">{p.short_description || "-"}</TableCell>
                 <TableCell>{p.moq ?? "-"}</TableCell>
                 <TableCell>{typeof p.unit === "string" ? p.unit : p.unit?.name || "-"}</TableCell>
@@ -289,13 +294,11 @@ export function ProductsPage({ initialProducts }: { initialProducts?: Product[] 
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        onSelect={(event) => {
-                          event.preventDefault()
-                          handleViewProduct(p.id)
-                        }}
-                      >
-                        عرض
+                      <DropdownMenuItem asChild>
+                        <Link href={`/products/${p.id}`} className="flex items-center">
+                          <Eye className="mr-2 h-4 w-4" />
+                          عرض التفاصيل
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>تعديل</DropdownMenuItem>
                       <DropdownMenuItem className="text-red-600">حذف</DropdownMenuItem>

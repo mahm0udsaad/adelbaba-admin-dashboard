@@ -1,4 +1,4 @@
-import { listVerificationRequests, type Paginated, type SupplierRequest, type RequestStatus } from "@/lib/server-actions"
+import { listVerificationRequests, type RequestStatus } from "@/lib/server-actions"
 import { Card } from "@/components/ui/card"
 import RequestsTable from "./requests-table"
 import RequestsPagination from "./pagination"
@@ -14,16 +14,17 @@ interface SearchParams {
   page?: string
 }
 
-export default async function VerificationRequestsPage({ searchParams }: { searchParams: SearchParams }) {
-  const perPage = Number(searchParams.per_page ?? "20")
-  const page = Number(searchParams.page ?? "1")
-  const status = (searchParams.status && searchParams.status !== "all" ? searchParams.status : undefined) as RequestStatus | undefined
-  const params = { status, company_id: searchParams.company_id, verified_by: searchParams.verified_by, per_page: perPage, page }
+export default async function VerificationRequestsPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const resolvedSearchParams = await searchParams
+  const perPage = Number(resolvedSearchParams.per_page ?? "20")
+  const page = Number(resolvedSearchParams.page ?? "1")
+  const status = (resolvedSearchParams.status && resolvedSearchParams.status !== "all" ? resolvedSearchParams.status : undefined) as RequestStatus | undefined
+  const params = { status, company_id: resolvedSearchParams.company_id, verified_by: resolvedSearchParams.verified_by, per_page: perPage, page }
   const data = await listVerificationRequests(params)
   
   return (
     <div className="space-y-4">
-      <FiltersBar initialParams={searchParams} />
+      <FiltersBar initialParams={resolvedSearchParams} />
       <Card className="p-0 overflow-hidden">
         <Suspense fallback={<div className="p-6">جارٍ التحميل...</div>}>
           <RequestsTable payload={data} params={params} quickAction={quickUpdateAction} updateAction={updateRequestAction} />

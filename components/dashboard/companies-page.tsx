@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Search, MoreHorizontal, Eye, Edit, Trash2 } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import Link from "next/link"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -26,14 +27,19 @@ import {
 interface Company {
   id: number
   name: string
+  logo?: string
+  commercial_register?: string
   description?: string
   founded_year?: number
   headquarters?: string
   contact_phone?: string
   contact_email?: string
+  phone?: string
+  email?: string
   region?: string
   state?: string
   city?: string
+  created_at?: string
   is_active: boolean
   is_verified: boolean
 }
@@ -45,17 +51,24 @@ export function CompaniesPage({ initialCompanies }: { initialCompanies?: Company
     const regionName = input?.region?.name || input?.region_name || input?.region
     const email =
       input?.contact_email || input?.email || input?.contact?.email || input?.owner?.email || input?.owner_email
+    const phone = input?.contact_phone || input?.phone || input?.owner?.phone || input?.owner_phone
 
     return {
       id: Number(input?.id),
       name: input?.name ?? "",
+      logo: input?.logo || undefined,
+      commercial_register: input?.commercial_register || undefined,
       description: input?.short_description || input?.description || undefined,
       founded_year: input?.founded_year ? Number(input?.founded_year) : undefined,
       headquarters: input?.headquarters || undefined,
       contact_email: email || undefined,
+      email: email || undefined,
+      contact_phone: phone || undefined,
+      phone: phone || undefined,
       region: regionName || undefined,
       state: stateName || undefined,
       city: cityName || undefined,
+      created_at: input?.created_at || undefined,
       is_active: Boolean(input?.is_active),
       is_verified: Boolean(input?.is_verified),
     }
@@ -159,12 +172,14 @@ export function CompaniesPage({ initialCompanies }: { initialCompanies?: Company
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>اسم الشركة</TableHead>
-              <TableHead>الوصف</TableHead>
-              <TableHead>سنة التأسيس</TableHead>
-              <TableHead>الموقع</TableHead>
+              <TableHead>المعرف</TableHead>
+              <TableHead>الشعار + اسم الشركة</TableHead>
+              <TableHead>رقم السجل التجاري</TableHead>
+              <TableHead>الدولة</TableHead>
+              <TableHead>المدينة</TableHead>
+              <TableHead>الهاتف</TableHead>
               <TableHead>البريد الإلكتروني</TableHead>
-              <TableHead>الحالة</TableHead>
+              <TableHead>تاريخ الإنشاء</TableHead>
               <TableHead>الإجراءات</TableHead>
             </TableRow>
           </TableHeader>
@@ -173,69 +188,82 @@ export function CompaniesPage({ initialCompanies }: { initialCompanies?: Company
               .filter(
                 (company) =>
                   company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  company.contact_email?.toLowerCase().includes(searchTerm.toLowerCase()),
+                  company.contact_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  company.email?.toLowerCase().includes(searchTerm.toLowerCase()),
               )
-              .map((company) => (
-                <TableRow key={company.id} className="cursor-pointer" onClick={() => (window.location.href = `/companies/${company.id}`)}>
-                  <TableCell className="font-medium">
-                    <Link href={`/companies/${company.id}`} className="hover:underline">
-                      {company.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="max-w-xs truncate">{company.description || "N/A"}</TableCell>
-                  <TableCell>{company.founded_year || "N/A"}</TableCell>
-                  <TableCell>
-                    {company.city && company.state
-                      ? `${company.city}, ${company.state}`
-                      : company.region || company.headquarters || "N/A"}
-                  </TableCell>
-                  <TableCell>{company.contact_email || "N/A"}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-1">
-                      <Badge
-                        variant={company.is_active ? "default" : "secondary"}
-                        className={company.is_active ? "bg-green-100 text-green-800" : ""}
-                      >
-                        {company.is_active ? "نشطة" : "غير نشطة"}
-                      </Badge>
-                      {company.is_verified && (
-                        <Badge variant="secondary" className="bg-amber-100 text-amber-800">
-                          موثقة
-                        </Badge>
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0" onClick={(e) => e.stopPropagation()}>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); window.location.href = `/companies/${company.id}` }}>
-                          <Eye className="mr-2 h-4 w-4" />
-                          عرض التفاصيل
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
-                          <Edit className="mr-2 h-4 w-4" />
-                          تعديل
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="text-red-600"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setConfirmState({ open: true, id: company.id, name: company.name })
-                          }}
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          حذف
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
+              .map((company) => {
+                const formatDate = (dateString?: string) => {
+                  if (!dateString) return "N/A"
+                  try {
+                    const date = new Date(dateString)
+                    return new Intl.DateTimeFormat("ar-SA", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                    }).format(date)
+                  } catch {
+                    return dateString
+                  }
+                }
+
+                return (
+                  <TableRow key={company.id} className="cursor-pointer" onClick={() => (window.location.href = `/companies/${company.id}`)}>
+                    <TableCell className="font-medium">{company.id}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        {company.logo ? (
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={company.logo} alt={company.name} />
+                            <AvatarFallback>{company.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                        ) : (
+                          <Avatar className="h-10 w-10">
+                            <AvatarFallback>{company.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                        )}
+                        <Link href={`/companies/${company.id}`} className="hover:underline font-medium" onClick={(e) => e.stopPropagation()}>
+                          {company.name}
+                        </Link>
+                      </div>
+                    </TableCell>
+                    <TableCell>{company.commercial_register || "N/A"}</TableCell>
+                    <TableCell>{company.region || "N/A"}</TableCell>
+                    <TableCell>{company.city || "N/A"}</TableCell>
+                    <TableCell>{company.phone || company.contact_phone || "N/A"}</TableCell>
+                    <TableCell>{company.email || company.contact_email || "N/A"}</TableCell>
+                    <TableCell>{formatDate(company.created_at)}</TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0" onClick={(e) => e.stopPropagation()}>
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); window.location.href = `/companies/${company.id}` }}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            عرض التفاصيل
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
+                            <Edit className="mr-2 h-4 w-4" />
+                            تعديل
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-red-600"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setConfirmState({ open: true, id: company.id, name: company.name })
+                            }}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            حذف
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
           </TableBody>
         </Table>
       </Card>

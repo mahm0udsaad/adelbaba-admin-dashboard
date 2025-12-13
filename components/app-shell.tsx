@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { BarChart3, Building2, Headphones, Menu, Users, Filter, Megaphone, Package, Shield, Star, CreditCard } from "lucide-react"
+import { BarChart3, Building2, Headphones, Menu, Users, Filter, Megaphone, Package, Shield, Star, CreditCard, Layers, ShoppingCart } from "lucide-react"
 
 type NavItem = {
   name: string
@@ -16,12 +16,15 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { name: "لوحة التحكم", id: "dashboard", href: "/dashboard", icon: BarChart3 },
+  { name: "الطلبات", id: "orders", href: "/orders", icon: ShoppingCart },
   { name: "الشركات", id: "companies", href: "/companies", icon: Building2 },
   { name: "طلبات توثيق الموردين", id: "verification-requests", href: "/admin/verification/requests", icon: Shield },
   { name: "المستخدمون", id: "users", href: "/users", icon: Users },
   { name: "تذاكر الدعم", id: "tickets", href: "/support-tickets", icon: Headphones },
   { name: "الأدوار والصلاحيات", id: "roles", href: "/roles", icon: Shield },
   { name: "الإعلانات", id: "ads", href: "/ads", icon: Megaphone },
+  { name: "الأقسام", id: "sections", href: "/sections", icon: Layers },
+  { name: "الفئات", id: "categories", href: "/categories", icon: Filter },
   { name: "المنتجات", id: "products", href: "/products", icon: Package },
   { name: "الوحدات", id: "units", href: "/products/units", icon: Package },
   { name: "الخصائص", id: "variations", href: "/products/variations", icon: Package },
@@ -36,6 +39,9 @@ const titles: Record<string, { title: string; subtitle: string }> = {
   "/users": { title: "المستخدمون", subtitle: "إدارة حسابات المستخدمين والأذونات" },
   "/support-tickets": { title: "تذاكر الدعم", subtitle: "التعامل مع طلبات ودعم العملاء" },
   "/roles": { title: "الأدوار والصلاحيات", subtitle: "إدارة الأدوار وتعيين الصلاحيات" },
+  "/orders": { title: "الطلبات", subtitle: "إدارة الطلبات والمدفوعات" },
+  "/sections": { title: "أقسام الموقع", subtitle: "إدارة أقسام وعروض المنتجات" },
+  "/categories": { title: "الفئات", subtitle: "إدارة فئات المنتجات" },
   "/subscriptions/plans": { title: "خطط الاشتراك", subtitle: "إدارة الخطط والدفع" },
   "/subscriptions/features": { title: "ميزات الاشتراك", subtitle: "إدارة ميزات الخطط" },
 }

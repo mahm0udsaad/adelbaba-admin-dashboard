@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal, Eye, Check, X } from "lucide-react"
-import { useMemo, useOptimistic, useState } from "react"
+import { useOptimistic, useState, useTransition } from "react"
 import RequestDialog from "./request-dialog"
 import { toast } from "@/components/ui/use-toast"
 import { updateVerificationRequest } from "@/lib/server-actions"
@@ -29,47 +29,87 @@ function statusVariant(status: string) {
   }
 }
 
-export default function RequestsTable({ payload, params, quickAction, updateAction }: { payload: Paginated<SupplierRequest>; params: any; quickAction?: any; updateAction?: any }) {
+export default function RequestsTable({ 
+  payload, 
+  params, 
+  quickAction, 
+  updateAction,
+  onDataChange 
+}: { 
+  payload: Paginated<SupplierRequest>
+  params: any
+  quickAction?: any
+  updateAction?: any
+  onDataChange?: () => void // Add callback to refresh data
+}) {
   const [openId, setOpenId] = useState<number | null>(null)
-  const [optimistic, setOptimistic] = useOptimistic(payload.data, (state, next: { id: number; status: string; reason?: string }) => {
-    return state.map((r) => (r.id === next.id ? { ...r, status: next.status as any, reason: next.reason ?? r.reason } : r))
-  })
+  const [isPending, startTransition] = useTransition()
+  
+  const [optimisticData, setOptimisticData] = useOptimistic(
+    payload.data, 
+    (state, next: { id: number; status: string; reason?: string }) => {
+      return state.map((r) => (r.id === next.id ? { ...r, status: next.status as any, reason: next.reason ?? r.reason } : r))
+    }
+  )
 
   const onQuick = async (id: number, status: "approved" | "rejected") => {
     try {
+      let reason: string | undefined
+
       if (status === "rejected") {
-        const reason = prompt("أدخل سبب الرفض:") || ""
-        if (!reason.trim()) return toast({ title: "سبب مطلوب", description: "يرجى كتابة سبب الرفض" })
-        setOptimistic({ id, status, reason })
-        if (quickAction) {
-          const fd = new FormData()
-          fd.set("id", String(id))
-          fd.set("status", status)
-          fd.set("reason", reason)
-          await quickAction({}, fd)
-        } else {
-          await updateVerificationRequest(id, { status, reason })
-        }
-      } else {
-        setOptimistic({ id, status })
-        if (quickAction) {
-          const fd = new FormData()
-          fd.set("id", String(id))
-          fd.set("status", status)
-          await quickAction({}, fd)
-        } else {
-          await updateVerificationRequest(id, { status })
+        reason = prompt("أدخل سبب الرفض:") || ""
+        if (!reason.trim()) {
+          toast({ title: "سبب مطلوب", description: "يرجى كتابة سبب الرفض" })
+          return
         }
       }
-      toast({ title: "تم الحفظ", description: "تم تحديث حالة الطلب" })
+
+      // Optimistically update the UI
+      startTransition(() => {
+        setOptimisticData({ id, status, reason })
+      })
+
+      // Perform the server action
+      if (quickAction) {
+        const fd = new FormData()
+        fd.set("id", String(id))
+        fd.set("status", status)
+        if (reason) fd.set("reason", reason)
+        await quickAction({}, fd)
+      } else {
+        await updateVerificationRequest(id, { status, reason })
+      }
+
+      // Refresh the data from the server
+      if (onDataChange) {
+        onDataChange()
+      }
+
+      toast({ 
+        title: "تم الحفظ", 
+        description: "تم تحديث حالة الطلب" 
+      })
     } catch (e: any) {
-      toast({ title: "فشل التحديث", description: e.message, variant: "destructive" })
+      toast({ 
+        title: "فشل التحديث", 
+        description: e.message, 
+        variant: "destructive" 
+      })
     }
   }
 
-  const rows = optimistic
+  const handleDialogUpdate = (next: { id: number; status: string; reason?: string }) => {
+    startTransition(() => {
+      setOptimisticData(next)
+    })
+    
+    // Refresh the data from the server
+    if (onDataChange) {
+      onDataChange()
+    }
+  }
 
-  if (!rows.length) {
+  if (!optimisticData.length) {
     return (
       <div className="p-8 text-center">
         <div className="text-lg mb-2">لا توجد طلبات مطابقة</div>
@@ -85,53 +125,62 @@ export default function RequestsTable({ payload, params, quickAction, updateActi
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>رقم الطلب</TableHead>
-            <TableHead>الشركة</TableHead>
+            <TableHead>اسم الشركة</TableHead>
             <TableHead>الحالة</TableHead>
-            <TableHead>التواريخ</TableHead>
-            <TableHead>المراجع</TableHead>
+            <TableHead>الدولة</TableHead>
+            <TableHead>المدينة</TableHead>
+            <TableHead>السجل التجاري</TableHead>
             <TableHead>إجراءات</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {rows.map((r) => (
+          {optimisticData.map((r) => (
             <TableRow key={r.id}>
-              <TableCell>#{r.id}</TableCell>
               <TableCell className="flex items-center gap-2">
                 <img src={r.company?.logo || "/placeholder-logo.png"} alt="logo" className="size-8 rounded" />
                 <span>{r.company?.name}</span>
               </TableCell>
               <TableCell>
-                <Badge variant={statusVariant(r.status) as any}>{r.status}</Badge>
+                <Badge className="text-white" variant={statusVariant(r.status) as any}>{r.status}</Badge>
               </TableCell>
               <TableCell>
-                <div className="text-sm">{new Date(r.created_at).toLocaleDateString()}</div>
-                <div className="text-xs text-muted-foreground">تحديث: {new Date(r.updated_at).toLocaleDateString()}</div>
+                {r.company?.region?.name || "—"}
               </TableCell>
               <TableCell>
-                {r.verifiedBy ? (
-                  <div className="flex items-center gap-2">
-                    <img src={r.verifiedBy.picture || "/placeholder-user.jpg"} className="size-6 rounded-full" />
-                    <span className="text-sm">{r.verifiedBy.name}</span>
-                  </div>
-                ) : (
-                  <span>—</span>
-                )}
+                {r.company?.location || "—"}
+              </TableCell>
+              <TableCell>
+                {r.company?.commercial_register || "—"}
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  <Button size="sm" variant="outline" onClick={() => setOpenId(r.id)}>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    onClick={() => setOpenId(r.id)}
+                    disabled={isPending}
+                  >
                     <Eye className="h-4 w-4 ml-1" /> عرض
                   </Button>
-                  <Button size="sm" variant="secondary" onClick={() => onQuick(r.id, "approved")}>
+                  <Button 
+                    size="sm" 
+                    className="bg-green-600 hover:bg-green-700 text-white" 
+                    onClick={() => onQuick(r.id, "approved")}
+                    disabled={isPending}
+                  >
                     <Check className="h-4 w-4 ml-1" /> قبول سريع
                   </Button>
-                  <Button size="sm" variant="destructive" onClick={() => onQuick(r.id, "rejected")}>
+                  <Button 
+                    size="sm" 
+                    variant="destructive" 
+                    onClick={() => onQuick(r.id, "rejected")}
+                    disabled={isPending}
+                  >
                     <X className="h-4 w-4 ml-1" /> رفض سريع
                   </Button>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button size="icon" variant="ghost">
+                      <Button size="icon" variant="ghost" disabled={isPending}>
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -155,12 +204,10 @@ export default function RequestsTable({ payload, params, quickAction, updateActi
           id={openId}
           open={openId !== null}
           onOpenChange={(o) => (!o ? setOpenId(null) : null)}
-          onUpdated={(next) => setOptimistic({ id: next.id, status: next.status, reason: next.reason || undefined })}
+          onUpdated={handleDialogUpdate}
           updateAction={updateAction}
         />
       )}
     </div>
   )
 }
-
-

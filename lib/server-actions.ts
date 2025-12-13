@@ -323,6 +323,40 @@ export async function getVerificationRequest(id: number | string): Promise<Suppl
   return mapSupplierRequestShape(payload)
 }
 
+// Sections
+export async function getSections(params?: { page?: number; per_page?: number; search?: string }) {
+  const data = await fetchWithAuth("/sections", params)
+  return data?.data ?? data
+}
+
+export async function getSection(id: number | string) {
+  const data = await fetchWithAuth(`/sections/${id}`)
+  return data?.data ?? data
+}
+
+// Orders
+export async function getOrders(params?: {
+  page?: number
+  per_page?: number
+  payment_status?: string
+  shipment_status?: string
+  sort?: "asc" | "desc"
+}) {
+  const data = await fetchWithAuth("/orders", params)
+  return data?.data ?? data
+}
+
+export async function getOrder(id: number | string) {
+  const data = await fetchWithAuth(`/orders/${id}`)
+  return data?.data ?? data
+}
+
+// Payments
+export async function getPayments(params?: { page?: number; per_page?: number; status?: string; sort?: "asc" | "desc" }) {
+  const data = await fetchWithAuth("/orders/payments", params)
+  return data?.data ?? data
+}
+
 export async function updateVerificationRequest(
   id: number | string,
   body: { status: Exclude<RequestStatus, "pending">; reason?: string },
