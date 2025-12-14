@@ -149,8 +149,9 @@ export const apiService = {
     api.post(`/ads/${id}/media`, media, { headers: { "Content-Type": "multipart/form-data" } }),
   deleteAdMedia: (adId: number, mediaId: number) => api.delete(`/ads/${adId}/media/${mediaId}`),
 
-  // Categories
-  fetchCategories: (params?: { page?: number; search?: string; parent_id?: number | string }) => api.get("/categories", { params }),
+  // Categories - Updated to support parent_id parameter
+  fetchCategories: (params?: { page?: number; search?: string; parent_id?: number | string }) => 
+    api.get("/categories", { params }),
   fetchCategory: (id: number) => api.get(`/categories/${id}`),
   createCategory: (data: FormData) =>
     api.post("/categories", data, { headers: { "Content-Type": "multipart/form-data" } }),
@@ -238,3 +239,4 @@ export const apiService = {
 }
 
 export default api
+
