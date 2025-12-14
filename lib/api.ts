@@ -150,7 +150,7 @@ export const apiService = {
   deleteAdMedia: (adId: number, mediaId: number) => api.delete(`/ads/${adId}/media/${mediaId}`),
 
   // Categories
-  fetchCategories: (params?: { page?: number; search?: string }) => api.get("/categories", { params }),
+  fetchCategories: (params?: { page?: number; search?: string; parent_id?: number | string }) => api.get("/categories", { params }),
   fetchCategory: (id: number) => api.get(`/categories/${id}`),
   createCategory: (data: FormData) =>
     api.post("/categories", data, { headers: { "Content-Type": "multipart/form-data" } }),

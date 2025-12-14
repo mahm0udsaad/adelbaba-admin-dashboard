@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -55,24 +56,20 @@ type GroupedPermissions = {
 }
 
 export function RolesPage({ initialRoles }: { initialRoles?: Role[] }) {
+  const router = useRouter()
   const [roles, setRoles] = useState<Role[]>(initialRoles ?? [])
   const [permissions, setPermissions] = useState<Permission[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   
-  // Dialog states
-  const [createDialogOpen, setCreateDialogOpen] = useState(false)
-  const [editDialogOpen, setEditDialogOpen] = useState(false)
+  // Dialog states (only for view and delete)
   const [viewDialogOpen, setViewDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   
-  // Form states
+  // Form states (only for view and delete)
   const [selectedRole, setSelectedRole] = useState<Role | null>(null)
-  const [roleName, setRoleName] = useState("")
-  const [selectedPermissions, setSelectedPermissions] = useState<number[]>([])
   const [saving, setSaving] = useState(false)
-  const [formError, setFormError] = useState<string | null>(null)
   
   const { toast } = useToast()
 
@@ -155,43 +152,14 @@ export function RolesPage({ initialRoles }: { initialRoles?: Role[] }) {
     return acc
   }, {} as GroupedPermissions)
 
-  // Reset form
-  const resetForm = () => {
-    setRoleName("")
-    setSelectedPermissions([])
-    setFormError(null)
-    setSelectedRole(null)
-  }
-
-  // Open create dialog
+  // Navigate to create page
   const handleCreate = () => {
-    resetForm()
-    setCreateDialogOpen(true)
+    router.push("/roles/create")
   }
 
-  // Open edit dialog
-  const handleEdit = async (role: Role) => {
-    try {
-      setLoading(true)
-      resetForm()
-      
-      // Fetch full role details with permissions
-      const res = await apiService.fetchRole(role.id)
-      const fullRole = res.data?.data || res.data || role
-      
-      setSelectedRole(fullRole)
-      setRoleName(fullRole.name)
-      setSelectedPermissions(fullRole.permissions?.map((p) => p.id) || [])
-      setEditDialogOpen(true)
-    } catch (err: any) {
-      toast({
-        title: "خطأ",
-        description: err.response?.data?.message || err.message || "فشل تحميل بيانات الدور",
-        variant: "destructive",
-      })
-    } finally {
-      setLoading(false)
-    }
+  // Navigate to edit page
+  const handleEdit = (role: Role) => {
+    router.push(`/roles/${role.id}/edit`)
   }
 
   // Open view dialog
@@ -219,121 +187,6 @@ export function RolesPage({ initialRoles }: { initialRoles?: Role[] }) {
     setDeleteDialogOpen(true)
   }
 
-  // Toggle permission selection
-  const togglePermission = (permissionId: number) => {
-    setSelectedPermissions((prev) =>
-      prev.includes(permissionId)
-        ? prev.filter((id) => id !== permissionId)
-        : [...prev, permissionId]
-    )
-  }
-
-  // Toggle all permissions in a resource group
-  const toggleResourceGroup = (resource: string) => {
-    const resourcePermissions = groupedPermissions[resource] || []
-    const resourceIds = resourcePermissions.map((p) => p.id)
-    const allSelected = resourceIds.every((id) => selectedPermissions.includes(id))
-    
-    if (allSelected) {
-      setSelectedPermissions((prev) => prev.filter((id) => !resourceIds.includes(id)))
-    } else {
-      setSelectedPermissions((prev) => {
-        const newIds = resourceIds.filter((id) => !prev.includes(id))
-        return [...prev, ...newIds]
-      })
-    }
-  }
-
-  // Create role
-  const handleCreateRole = async () => {
-    if (!roleName.trim()) {
-      setFormError("اسم الدور مطلوب")
-      return
-    }
-    
-    if (selectedPermissions.length === 0) {
-      setFormError("يجب اختيار صلاحية واحدة على الأقل")
-      return
-    }
-
-    try {
-      setSaving(true)
-      setFormError(null)
-      
-      const res = await apiService.createRole({
-        name: roleName.trim(),
-        permissions: selectedPermissions,
-      })
-      
-      const newRole = res.data?.data || res.data
-      setRoles((prev) => [...prev, newRole])
-      
-      toast({
-        title: "نجح",
-        description: "تم إنشاء الدور بنجاح",
-      })
-      
-      setCreateDialogOpen(false)
-      resetForm()
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.message || err.message || "فشل إنشاء الدور"
-      setFormError(errorMessage)
-      toast({
-        title: "خطأ",
-        description: errorMessage,
-        variant: "destructive",
-      })
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  // Update role
-  const handleUpdateRole = async () => {
-    if (!selectedRole) return
-    
-    if (!roleName.trim()) {
-      setFormError("اسم الدور مطلوب")
-      return
-    }
-    
-    if (selectedPermissions.length === 0) {
-      setFormError("يجب اختيار صلاحية واحدة على الأقل")
-      return
-    }
-
-    try {
-      setSaving(true)
-      setFormError(null)
-      
-      const res = await apiService.updateRole(selectedRole.id, {
-        name: roleName.trim(),
-        permissions: selectedPermissions,
-      })
-      
-      const updatedRole = res.data?.data || res.data
-      setRoles((prev) => prev.map((r) => (r.id === selectedRole.id ? updatedRole : r)))
-      
-      toast({
-        title: "نجح",
-        description: "تم تحديث الدور بنجاح",
-      })
-      
-      setEditDialogOpen(false)
-      resetForm()
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.message || err.message || "فشل تحديث الدور"
-      setFormError(errorMessage)
-      toast({
-        title: "خطأ",
-        description: errorMessage,
-        variant: "destructive",
-      })
-    } finally {
-      setSaving(false)
-    }
-  }
-
   // Delete role
   const handleDeleteRole = async () => {
     if (!selectedRole) return
@@ -350,7 +203,7 @@ export function RolesPage({ initialRoles }: { initialRoles?: Role[] }) {
       })
       
       setDeleteDialogOpen(false)
-      resetForm()
+      setSelectedRole(null)
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || err.message || "فشل حذف الدور"
       toast({
@@ -463,292 +316,21 @@ export function RolesPage({ initialRoles }: { initialRoles?: Role[] }) {
         </CardContent>
       </Card>
 
-      {/* Create Role Dialog */}
-      <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh]">
-          <DialogHeader>
-            <DialogTitle>إضافة دور جديد</DialogTitle>
-            <DialogDescription>
-              قم بإدخال اسم الدور واختر الصلاحيات المناسبة
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4">
-            {formError && (
-              <Alert variant="destructive">
-                <AlertTitle>خطأ</AlertTitle>
-                <AlertDescription>{formError}</AlertDescription>
-              </Alert>
-            )}
-
-            <div className="space-y-2">
-              <Label htmlFor="role-name">اسم الدور</Label>
-              <Input
-                id="role-name"
-                value={roleName}
-                onChange={(e) => setRoleName(e.target.value)}
-                placeholder="مثال: مدير المبيعات"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>الصلاحيات</Label>
-              <ScrollArea className="h-[400px] rounded-md border p-4">
-                {permissions.length > 0 ? (
-                  <div className="space-y-4">
-                    {Object.keys(groupedPermissions).length === 0 ? (
-                      <div className="text-center py-8">
-                        <p className="text-gray-500 mb-2">لا توجد صلاحيات متاحة</p>
-                        <p className="text-sm text-gray-400">
-                          يجب إضافة الصلاحيات في قاعدة البيانات أولاً
-                        </p>
-                      </div>
-                    ) : (
-                      Object.entries(groupedPermissions).map(([resource, perms]) => {
-                        const resourceIds = perms.map((p) => p.id)
-                        const allSelected = resourceIds.every((id) => selectedPermissions.includes(id))
-                        const someSelected = resourceIds.some((id) => selectedPermissions.includes(id))
-
-                        return (
-                          <div key={resource} className="space-y-2">
-                            <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                              <Checkbox
-                                id={`resource-${resource}`}
-                                checked={allSelected}
-                                onCheckedChange={() => toggleResourceGroup(resource)}
-                                className={someSelected && !allSelected ? "opacity-50" : ""}
-                              />
-                              <Label
-                                htmlFor={`resource-${resource}`}
-                                className="font-semibold cursor-pointer"
-                              >
-                                {resource}
-                              </Label>
-                            </div>
-                            <div className="mr-6 rtl:ml-6 rtl:mr-0 space-y-2">
-                              {perms.map((permission) => (
-                                <div
-                                  key={permission.id}
-                                  className="flex items-center space-x-2 rtl:space-x-reverse"
-                                >
-                                  <Checkbox
-                                    id={`perm-${permission.id}`}
-                                    checked={selectedPermissions.includes(permission.id)}
-                                    onCheckedChange={() => togglePermission(permission.id)}
-                                  />
-                                  <Label
-                                    htmlFor={`perm-${permission.id}`}
-                                    className="text-sm cursor-pointer font-normal"
-                                  >
-                                    {permission.name}
-                                  </Label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )
-                      })
-                    )}
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <p className="text-gray-500 mb-2">لا توجد صلاحيات متاحة في النظام</p>
-                    <p className="text-sm text-gray-400 mb-4">
-                      يرجى التأكد من وجود صلاحيات في قاعدة البيانات
-                    </p>
-                    <Alert className="text-right">
-                      <AlertTitle>ملاحظة</AlertTitle>
-                      <AlertDescription>
-                        يجب إضافة الصلاحيات (Permissions) في قاعدة البيانات من خلال الـ Backend.
-                        <br />
-                        مثال: company.view, company.create, company.update, company.delete
-                      </AlertDescription>
-                    </Alert>
-                  </div>
-                )}
-              </ScrollArea>
-              <p className="text-sm text-gray-500">
-                تم اختيار {selectedPermissions.length} من {permissions.length} صلاحية
-              </p>
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setCreateDialogOpen(false)
-                resetForm()
-              }}
-              disabled={saving}
-            >
-              إلغاء
-            </Button>
-            <Button onClick={handleCreateRole} disabled={saving}>
-              {saving ? (
-                <>
-                  <Loader2 className="ml-2 rtl:mr-2 rtl:ml-0 h-4 w-4 animate-spin" />
-                  جاري الحفظ...
-                </>
-              ) : (
-                "حفظ"
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Role Dialog */}
-      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh]">
-          <DialogHeader>
-            <DialogTitle>تعديل الدور</DialogTitle>
-            <DialogDescription>
-              قم بتعديل اسم الدور والصلاحيات
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4">
-            {formError && (
-              <Alert variant="destructive">
-                <AlertTitle>خطأ</AlertTitle>
-                <AlertDescription>{formError}</AlertDescription>
-              </Alert>
-            )}
-
-            <div className="space-y-2">
-              <Label htmlFor="edit-role-name">اسم الدور</Label>
-              <Input
-                id="edit-role-name"
-                value={roleName}
-                onChange={(e) => setRoleName(e.target.value)}
-                placeholder="مثال: مدير المبيعات"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>الصلاحيات</Label>
-              <ScrollArea className="h-[400px] rounded-md border p-4">
-                {permissions.length > 0 ? (
-                  <div className="space-y-4">
-                    {Object.keys(groupedPermissions).length === 0 ? (
-                      <div className="text-center py-8">
-                        <p className="text-gray-500 mb-2">لا توجد صلاحيات متاحة</p>
-                        <p className="text-sm text-gray-400">
-                          يجب إضافة الصلاحيات في قاعدة البيانات أولاً
-                        </p>
-                      </div>
-                    ) : (
-                      Object.entries(groupedPermissions).map(([resource, perms]) => {
-                    const resourceIds = perms.map((p) => p.id)
-                    const allSelected = resourceIds.every((id) => selectedPermissions.includes(id))
-                    const someSelected = resourceIds.some((id) => selectedPermissions.includes(id))
-
-                    return (
-                      <div key={resource} className="space-y-2">
-                        <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                          <Checkbox
-                            id={`edit-resource-${resource}`}
-                            checked={allSelected}
-                            onCheckedChange={() => toggleResourceGroup(resource)}
-                            className={someSelected && !allSelected ? "opacity-50" : ""}
-                          />
-                          <Label
-                            htmlFor={`edit-resource-${resource}`}
-                            className="font-semibold cursor-pointer"
-                          >
-                            {resource}
-                          </Label>
-                        </div>
-                        <div className="mr-6 rtl:ml-6 rtl:mr-0 space-y-2">
-                          {perms.map((permission) => (
-                            <div
-                              key={permission.id}
-                              className="flex items-center space-x-2 rtl:space-x-reverse"
-                            >
-                              <Checkbox
-                                id={`edit-perm-${permission.id}`}
-                                checked={selectedPermissions.includes(permission.id)}
-                                onCheckedChange={() => togglePermission(permission.id)}
-                              />
-                              <Label
-                                htmlFor={`edit-perm-${permission.id}`}
-                                className="text-sm cursor-pointer font-normal"
-                              >
-                                {permission.name}
-                              </Label>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )
-                  })
-                    )}
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <p className="text-gray-500 mb-2">لا توجد صلاحيات متاحة في النظام</p>
-                    <p className="text-sm text-gray-400 mb-4">
-                      يرجى التأكد من وجود صلاحيات في قاعدة البيانات
-                    </p>
-                    <div className="max-w-md mx-auto">
-                      <Alert className="text-right">
-                        <AlertTitle>ملاحظة</AlertTitle>
-                        <AlertDescription>
-                          يجب إضافة الصلاحيات (Permissions) في قاعدة البيانات من خلال الـ Backend.
-                          <br />
-                          مثال: company.view, company.create, company.update, company.delete
-                        </AlertDescription>
-                      </Alert>
-                    </div>
-                  </div>
-                )}
-              </ScrollArea>
-              <p className="text-sm text-gray-500">
-                تم اختيار {selectedPermissions.length} من {permissions.length} صلاحية
-              </p>
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setEditDialogOpen(false)
-                resetForm()
-              }}
-              disabled={saving}
-            >
-              إلغاء
-            </Button>
-            <Button onClick={handleUpdateRole} disabled={saving}>
-              {saving ? (
-                <>
-                  <Loader2 className="ml-2 rtl:mr-2 rtl:ml-0 h-4 w-4 animate-spin" />
-                  جاري الحفظ...
-                </>
-              ) : (
-                "حفظ التغييرات"
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
       {/* View Role Dialog */}
       <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh]">
+        <DialogContent className="max-w-7xl max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>تفاصيل الدور: {selectedRole?.name}</DialogTitle>
-            <DialogDescription>عرض جميع الصلاحيات المخصصة لهذا الدور</DialogDescription>
+            <DialogDescription>
+              عرض جميع الصلاحيات المخصصة لهذا الدور ({selectedRole?.permissions?.length ?? 0} صلاحية)
+            </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
             <div>
-              <Label className="text-base font-semibold">الصلاحيات ({selectedRole?.permissions?.length ?? 0})</Label>
-              <ScrollArea className="h-[400px] rounded-md border p-4 mt-2">
+              <ScrollArea className="h-[600px] rounded-md border p-6">
                 {selectedRole?.permissions && selectedRole.permissions.length > 0 ? (
-                  <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                     {Object.entries(groupedPermissions).map(([resource, perms]) => {
                       const rolePerms = selectedRole.permissions || []
                       const resourcePerms = perms.filter((p) =>
@@ -758,22 +340,30 @@ export function RolesPage({ initialRoles }: { initialRoles?: Role[] }) {
                       if (resourcePerms.length === 0) return null
 
                       return (
-                        <div key={resource} className="space-y-2">
-                          <div className="font-semibold text-base">{resource}</div>
-                          <div className="mr-6 rtl:ml-6 rtl:mr-0 space-y-2">
+                        <Card key={resource} className="space-y-4 shadow-sm">
+                          <div className="flex items-center space-x-3 rtl:space-x-reverse p-4 border-b bg-gray-50">
+                            <Checkbox checked={true} disabled className="h-5 w-5" />
+                            <Label className="font-semibold flex-1 text-base">
+                              {resource}
+                            </Label>
+                            <Badge variant="secondary" className="bg-amber-100 text-amber-800">
+                              {resourcePerms.length}
+                            </Badge>
+                          </div>
+                          <div className="space-y-3 p-4">
                             {resourcePerms.map((permission) => (
                               <div
                                 key={permission.id}
-                                className="flex items-center space-x-2 rtl:space-x-reverse"
+                                className="flex items-center space-x-3 rtl:space-x-reverse py-1"
                               >
-                                <Checkbox checked={true} disabled />
-                                <Label className="text-sm font-normal">
+                                <Checkbox checked={true} disabled className="h-5 w-5" />
+                                <Label className="text-sm font-normal flex-1 leading-relaxed">
                                   {permission.name}
                                 </Label>
                               </div>
                             ))}
                           </div>
-                        </div>
+                        </Card>
                       )
                     })}
                   </div>

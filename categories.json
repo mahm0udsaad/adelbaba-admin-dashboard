@@ -1,4 +1,11 @@
 {
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Default module",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [],
   "paths": {
     "/api/v1/admin/categories": {
       "get": {
@@ -23,6 +30,16 @@
             "description": "",
             "required": false,
             "example": "sports",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "parent_id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "503",
             "schema": {
               "type": "string"
             }
@@ -1275,5 +1292,11 @@
         "scheme": "bearer"
       }
     }
-  }
+  },
+  "servers": [],
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
 }

@@ -7,7 +7,7 @@
   },
   "tags": [],
   "paths": {
-    "/api/v1/admin/orders": {
+    "/api/v1/company/orders": {
       "get": {
         "summary": "List Orders",
         "deprecated": false,
@@ -71,9 +71,46 @@
             "bearer": []
           }
         ]
+      },
+      "post": {
+        "summary": "Create Order",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": "{\r\n    \"order\": {\r\n        \"user_id\": 123,\r\n        \"notes\": \"Custom blue color with gold trim\", // Nullable\r\n        \"shipping\": 15.00, // Nullable\r\n        \"tax\": 8.50, // Nullable\r\n        \"expires_at\": \"2025-10-30\", // Required\r\n    },\r\n    \"items\": [\r\n        {\r\n            \"product_id\": 1,\r\n            \"sku_id\": 2,\r\n            \"quantity\": 5,\r\n            \"price_per_unit\": 29.99,\r\n            \"customization\": \"Blue color, gold trim\"\r\n        }\r\n    ]\r\n}"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
-    "/api/v1/admin/orders/{id}": {
+    "/api/v1/company/orders/{id}": {
       "get": {
         "summary": "Show Order Details",
         "deprecated": false,
@@ -112,13 +149,24 @@
         ]
       }
     },
-    "/api/v1/company/orders": {
-      "post": {
-        "summary": "Create Order",
+    "/api/v1/company/orders/{id}/status": {
+      "patch": {
+        "summary": "Change Order Shipment Status",
         "deprecated": false,
         "description": "",
         "tags": [],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "21",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -126,7 +174,7 @@
                 "type": "object",
                 "properties": {}
               },
-              "example": "{\r\n    \"order\": {\r\n        \"user_id\": 123,\r\n        \"notes\": \"Custom blue color with gold trim\", // Nullable\r\n        \"shipping\": 15.00, // Nullable\r\n        \"tax\": 8.50, // Nullable\r\n        \"expires_at\": \"2025-10-30\", // Required\r\n    },\r\n    \"items\": [\r\n        {\r\n            \"product_id\": 1,\r\n            \"sku_id\": 2,\r\n            \"quantity\": 5,\r\n            \"price_per_unit\": 29.99,\r\n            \"customization\": \"Blue color, gold trim\"\r\n        }\r\n    ]\r\n}"
+              "example": "{\r\n    // Available Enum Values\r\n    // pending || processing || shipped|| in_transit || out_for_delivery || delivered || failed_delivery || returned || cancelled\r\n    \"status\": \"processing\"\r\n}"
             }
           }
         },

@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Search, MoreHorizontal, Plus, Edit, Trash2, Loader2, Image as ImageIcon } from "lucide-react"
+import { Search, MoreHorizontal, Plus, Edit, Trash2, Loader2, Image as ImageIcon, FolderTree, ArrowRight, Home } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 import {
   Select,
   SelectContent,
@@ -63,6 +64,8 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
   const [searchTerm, setSearchTerm] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [currentParent, setCurrentParent] = useState<Category | null>(null)
+  const [viewMode, setViewMode] = useState<"all" | "parents" | "children">("all")
 
   // Dialog states
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
@@ -90,31 +93,40 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
   const { toast } = useToast()
 
   // Load categories
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        setLoading(true)
-        setError(null)
+  const loadCategories = async (parentId?: number | null) => {
+    try {
+      setLoading(true)
+      setError(null)
 
-        const res = await apiService.fetchCategories()
-        setCategories(res.data?.data || res.data || [])
-      } catch (err: any) {
-        const errorMessage = err.response?.data?.message || err.message || "فشل تحميل الفئات"
-        setError(errorMessage)
-        toast({
-          title: "خطأ",
-          description: errorMessage,
-          variant: "destructive",
-        })
-      } finally {
-        setLoading(false)
+      const params: any = {}
+      
+      if (viewMode === "parents") {
+        // For parent view, we want categories without parents
+        // The API returns parent field as null for top-level categories
+      } else if (viewMode === "children" && parentId) {
+        params.parent_id = parentId
       }
-    }
 
-    if (initialCategories === undefined) {
-      loadCategories()
+      const res = await apiService.fetchCategories(params)
+      setCategories(res.data?.data || res.data || [])
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || "فشل تحميل الفئات"
+      setError(errorMessage)
+      toast({
+        title: "خطأ",
+        description: errorMessage,
+        variant: "destructive",
+      })
+    } finally {
+      setLoading(false)
     }
-  }, [initialCategories, toast])
+  }
+
+  useEffect(() => {
+    if (initialCategories === undefined || viewMode !== "all" || currentParent !== null) {
+      loadCategories(currentParent?.id)
+    }
+  }, [viewMode, currentParent])
 
   // Reset form
   const resetForm = () => {
@@ -183,6 +195,24 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
   const handleDelete = (category: Category) => {
     setSelectedCategory(category)
     setDeleteDialogOpen(true)
+  }
+
+  // View children of a category
+  const handleViewChildren = (category: Category) => {
+    setCurrentParent(category)
+    setViewMode("children")
+  }
+
+  // Go back to all categories
+  const handleBackToAll = () => {
+    setCurrentParent(null)
+    setViewMode("all")
+  }
+
+  // View only parent categories
+  const handleViewParents = () => {
+    setCurrentParent(null)
+    setViewMode("parents")
   }
 
   // Create category
@@ -312,27 +342,85 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
 
   const parentCategories = categories.filter((c) => !c.parent)
 
-  const filteredCategories = categories.filter((c) =>
-    c.name?.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const filteredCategories = categories.filter((c) => {
+    const matchesSearch = c.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    
+    if (viewMode === "parents") {
+      return matchesSearch && !c.parent
+    }
+    
+    return matchesSearch
+  })
+  
+  // Count children for each category
+  const getChildrenCount = (categoryId: number) => {
+    return categories.filter((c) => c.parent?.id === categoryId).length
+  }
 
   return (
     <div className="space-y-4">
+      {/* Breadcrumb Navigation */}
+      {(viewMode === "children" && currentParent) && (
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink onClick={handleBackToAll} className="cursor-pointer flex items-center gap-1">
+                <Home className="h-3 w-3" />
+                كل الفئات
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>
+              <ArrowRight className="h-4 w-4 rotate-180" />
+            </BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbPage>{currentParent.name}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      )}
+
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 rtl:right-3 rtl:left-auto top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-          <Input
-            placeholder="ابحث عن فئة..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 rtl:pl-3 rtl:pr-10"
-          />
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 rtl:right-3 rtl:left-auto top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="ابحث عن فئة..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 rtl:pl-3 rtl:pr-10"
+            />
+          </div>
+          <Button onClick={handleCreate} className="w-full sm:w-auto">
+            <Plus className="ml-2 rtl:mr-2 rtl:ml-0 h-4 w-4" />
+            إضافة فئة جديدة
+          </Button>
         </div>
-        <Button onClick={handleCreate} className="w-full sm:w-auto">
-          <Plus className="ml-2 rtl:mr-2 rtl:ml-0 h-4 w-4" />
-          إضافة فئة جديدة
-        </Button>
+        
+        {/* View Mode Buttons */}
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant={viewMode === "all" ? "default" : "outline"}
+            size="sm"
+            onClick={handleBackToAll}
+          >
+            <Home className="ml-2 rtl:mr-2 rtl:ml-0 h-4 w-4" />
+            كل الفئات
+          </Button>
+          <Button
+            variant={viewMode === "parents" ? "default" : "outline"}
+            size="sm"
+            onClick={handleViewParents}
+          >
+            <FolderTree className="ml-2 rtl:mr-2 rtl:ml-0 h-4 w-4" />
+            الفئات الرئيسية فقط
+          </Button>
+          {currentParent && (
+            <Badge variant="secondary" className="text-sm py-1.5 px-3">
+              عرض فئات فرعية لـ: {currentParent.name}
+            </Badge>
+          )}
+        </div>
       </div>
 
       {/* Error Alert */}
@@ -356,7 +444,11 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
             </div>
           ) : filteredCategories.length === 0 ? (
             <div className="text-center p-8 text-gray-500">
-              {searchTerm ? "لا توجد نتائج للبحث" : "لا توجد فئات"}
+              {viewMode === "children" && currentParent
+                ? `لا توجد فئات فرعية لـ "${currentParent.name}"`
+                : searchTerm
+                ? "لا توجد نتائج للبحث"
+                : "لا توجد فئات"}
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -367,6 +459,7 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
                     <TableHead>الاسم</TableHead>
                     <TableHead>الأيقونة</TableHead>
                     <TableHead>الفئة الأم</TableHead>
+                    <TableHead>الفئات الفرعية</TableHead>
                     <TableHead>مميز</TableHead>
                     <TableHead className="text-left rtl:text-right">إجراءات</TableHead>
                   </TableRow>
@@ -398,6 +491,21 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
                       <TableCell>
                         {category.parent ? (
                           <Badge variant="outline">{category.parent.name}</Badge>
+                        ) : (
+                          <span className="text-sm text-gray-400">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {!category.parent && viewMode !== "children" ? (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleViewChildren(category)}
+                            className="text-xs"
+                          >
+                            <FolderTree className="ml-1 rtl:mr-1 rtl:ml-0 h-3 w-3" />
+                            عرض ({getChildrenCount(category.id)})
+                          </Button>
                         ) : (
                           <span className="text-sm text-gray-400">-</span>
                         )}
