@@ -200,6 +200,7 @@ export function CompaniesPage({ initialCompanies }: { initialCompanies?: Company
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",
+                      calendar: "gregory",
                     }).format(date)
                   } catch {
                     return dateString

@@ -202,7 +202,16 @@ export function CategoriesPage({ initialCategories }: { initialCategories?: any 
                     {category.is_featured ? "مميزة" : "عادية"}
                   </Badge>
                 </TableCell>
-                <TableCell>{category.created_at ? new Date(category.created_at).toLocaleDateString() : "—"}</TableCell>
+                <TableCell>
+                  {category.created_at
+                    ? new Intl.DateTimeFormat("ar-SA", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        calendar: "gregory",
+                      }).format(new Date(category.created_at))
+                    : "—"}
+                </TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

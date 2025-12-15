@@ -41,6 +41,7 @@ function formatDate(dateString?: string | null) {
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      calendar: "gregory",
     }).format(date)
   } catch {
     return dateString

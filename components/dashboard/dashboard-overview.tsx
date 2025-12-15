@@ -41,57 +41,57 @@ export function DashboardOverview({
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-4 gap-x-4">
+        <Card className="border-blue-200 bg-blue-500 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-amber-800">Total Companies</CardTitle>
-            <Building2 className="h-4 w-4 text-amber-600" />
+            <CardTitle className="text-sm font-medium text-white">Total Companies</CardTitle>
+            <Building2 className="h-4 w-4 text-white" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-amber-900">{totalCompanies}</div>
-            <p className="text-xs text-amber-600">
+            <div className="text-2xl font-bold text-white">{totalCompanies}</div>
+            <p className="text-xs text-white">
               <TrendingUp className="inline h-3 w-3 mr-1" />
               Live data from API
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50">
+        <Card className="border-green-200 bg-green-500 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-amber-800">Active Users</CardTitle>
-            <Users className="h-4 w-4 text-amber-600" />
+            <CardTitle className="text-sm font-medium text-white">Active Users</CardTitle>
+            <Users className="h-4 w-4 text-white" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-amber-900">{totalUsers}</div>
-            <p className="text-xs text-amber-600">
+            <div className="text-2xl font-bold text-white">{totalUsers}</div>
+            <p className="text-xs text-white">
               <TrendingUp className="inline h-3 w-3 mr-1" />
               Live data from API
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50">
+        <Card className="border-yellow-200 bg-yellow-500 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-amber-800">Open Tickets</CardTitle>
-            <Headphones className="h-4 w-4 text-amber-600" />
+            <CardTitle className="text-sm font-medium text-white">Open Tickets</CardTitle>
+            <Headphones className="h-4 w-4 text-white" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-amber-900">{openTickets}</div>
-            <p className="text-xs text-amber-600">
+            <div className="text-2xl font-bold text-white">{openTickets}</div>
+            <p className="text-xs text-white">
               <Clock className="inline h-3 w-3 mr-1" />
               Live data from API
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50">
+          <Card className="border-red-200 bg-red-500 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-amber-800">System Status</CardTitle>
-            <CreditCard className="h-4 w-4 text-amber-600" />
+            <CardTitle className="text-sm font-medium text-white">System Status</CardTitle>
+            <CreditCard className="h-4 w-4 text-white" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-amber-900">Online</div>
-            <p className="text-xs text-amber-600">
+            <div className="text-2xl font-bold text-white">Online</div>
+            <p className="text-xs text-white">
               <CheckCircle className="inline h-3 w-3 mr-1" />
               API Connected
             </p>
@@ -102,7 +102,7 @@ export function DashboardOverview({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-amber-900">Recent Activity</CardTitle>
+            <CardTitle className="text-black font-bold">Recent Activity</CardTitle>
             <CardDescription>Latest system activities and updates</CardDescription>
           </CardHeader>
           <CardContent>
@@ -127,7 +127,7 @@ export function DashboardOverview({
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-amber-900">System Status</CardTitle>
+              <CardTitle className="text-black font-bold">System Status</CardTitle>
             <CardDescription>Current system health and performance</CardDescription>
           </CardHeader>
           <CardContent>

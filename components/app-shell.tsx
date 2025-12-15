@@ -56,7 +56,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [pathname])
 
   const SidebarContent = (
-    <div className="w-64 bg-white border-r border-gray-200 flex h-full flex-col">
+    <div className="w-64 bg-sidebar border-r border-sidebar-border flex h-full flex-col">
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center">
@@ -108,7 +108,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Main */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-3 md:py-4">
+        <header className="bg-sidebar border-b border-gray-200 px-4 md:px-6 py-3 md:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileOpen(true)}>

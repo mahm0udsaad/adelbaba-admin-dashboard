@@ -36,6 +36,7 @@ function formatDate(dateString?: string | null) {
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      calendar: "gregory",
     }).format(date)
   } catch {
     return dateString
@@ -50,6 +51,7 @@ function formatDateShort(dateString?: string | null) {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
+      calendar: "gregory",
     }).format(date)
   } catch {
     return dateString

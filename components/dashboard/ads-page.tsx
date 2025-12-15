@@ -110,8 +110,26 @@ export function AdsPage({ initialAds }: { initialAds?: Ad[] }) {
                 <TableCell>{ad.status || "-"}</TableCell>
                 <TableCell>{ad.type || "-"}</TableCell>
                 <TableCell>{ad.location || "-"}</TableCell>
-                <TableCell>{ad.starts_at ? new Date(ad.starts_at).toLocaleDateString() : "-"}</TableCell>
-                <TableCell>{ad.ends_at ? new Date(ad.ends_at).toLocaleDateString() : "-"}</TableCell>
+                <TableCell>
+                  {ad.starts_at
+                    ? new Intl.DateTimeFormat("ar-SA", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        calendar: "gregory",
+                      }).format(new Date(ad.starts_at))
+                    : "-"}
+                </TableCell>
+                <TableCell>
+                  {ad.ends_at
+                    ? new Intl.DateTimeFormat("ar-SA", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        calendar: "gregory",
+                      }).format(new Date(ad.ends_at))
+                    : "-"}
+                </TableCell>
                 <TableCell className="truncate max-w-[200px]">{ad.target_url || "-"}</TableCell>
                 <TableCell>
                   <DropdownMenu>

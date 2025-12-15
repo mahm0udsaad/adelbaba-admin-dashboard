@@ -397,7 +397,14 @@ export function SupportTicketsPage({ initialTickets }: { initialTickets?: Suppor
                   </Badge>
                 </TableCell>
                 <TableCell>{ticket.assignedTo || "Unassigned"}</TableCell>
-                <TableCell>{new Date(ticket.created_at).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  {new Intl.DateTimeFormat("ar-SA", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    calendar: "gregory",
+                  }).format(new Date(ticket.created_at))}
+                </TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -526,7 +533,16 @@ export function SupportTicketsPage({ initialTickets }: { initialTickets?: Suppor
                         <div key={entry.id} className="rounded-md bg-gray-50 p-3 text-sm">
                           <div className="flex items-center justify-between text-xs text-gray-500">
                             <span>{entry.user?.name || "System"}</span>
-                            <span>{new Date(entry.created_at).toLocaleString()}</span>
+                            <span>
+                              {new Intl.DateTimeFormat("ar-SA", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                calendar: "gregory",
+                              }).format(new Date(entry.created_at))}
+                            </span>
                           </div>
                           <p className="mt-2 whitespace-pre-wrap text-gray-700">{entry.message}</p>
                         </div>
@@ -564,7 +580,17 @@ export function SupportTicketsPage({ initialTickets }: { initialTickets?: Suppor
                 <div className="space-y-2 text-sm">
                   <h4 className="text-sm font-semibold text-gray-900">Ticket Info</h4>
                   <p><span className="text-gray-500">Category:</span> {ticketDetail.category || "—"}</p>
-                  <p><span className="text-gray-500">Created:</span> {new Date(ticketDetail.created_at).toLocaleString()}</p>
+                  <p>
+                    <span className="text-gray-500">Created:</span>{" "}
+                    {new Intl.DateTimeFormat("ar-SA", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      calendar: "gregory",
+                    }).format(new Date(ticketDetail.created_at))}
+                  </p>
                 </div>
 
                 {ticketDetail.attachments && ticketDetail.attachments.length > 0 && (

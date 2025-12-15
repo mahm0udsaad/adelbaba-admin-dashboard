@@ -230,6 +230,7 @@ export function formatDate(timestamp?: string): string {
     return new Intl.DateTimeFormat("ar-EG", {
       dateStyle: "medium",
       timeStyle: "short",
+      calendar: "gregory",
     }).format(new Date(timestamp))
   } catch {
     return timestamp

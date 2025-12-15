@@ -268,7 +268,12 @@ export function OrdersPage({ initialOrders }: { initialOrders?: Order[] }) {
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          {new Date(order.created_at).toLocaleDateString("ar-SA")}
+                          {new Intl.DateTimeFormat("ar-SA", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            calendar: "gregory",
+                          }).format(new Date(order.created_at))}
                         </TableCell>
                         <TableCell>
                           <DropdownMenu>
