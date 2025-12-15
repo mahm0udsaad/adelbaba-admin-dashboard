@@ -14,21 +14,42 @@ import { apiService } from "@/lib/api"
 
 interface Category {
   id: number
-  name: string
+  name: {
+    ar: string
+    en: string
+  }
   is_featured: boolean
   image?: string | null
-  parent_name?: string | null
+  parent_name?: {
+    ar: string
+    en: string
+  } | null
   created_at?: string
   updated_at?: string
 }
 
 function normalizeCategory(payload: any): Category {
+  // Handle both old string format and new bilingual object format
+  const normalizeName = (nameValue: any) => {
+    if (typeof nameValue === 'object' && nameValue !== null) {
+      return {
+        ar: nameValue.ar || '',
+        en: nameValue.en || ''
+      }
+    }
+    // Fallback for old string format
+    return {
+      ar: String(nameValue || ''),
+      en: String(nameValue || '')
+    }
+  }
+
   return {
     id: Number(payload?.id),
-    name: payload?.name ?? "",
+    name: normalizeName(payload?.name),
     is_featured: Boolean(payload?.is_featured ?? payload?.featured),
     image: payload?.image ?? payload?.thumbnail ?? null,
-    parent_name: payload?.parent?.name ?? payload?.parent_name ?? null,
+    parent_name: payload?.parent?.name ? normalizeName(payload.parent.name) : null,
     created_at: payload?.created_at,
     updated_at: payload?.updated_at,
   }
@@ -74,8 +95,10 @@ export function CategoriesPage({ initialCategories }: { initialCategories?: any 
     return categories.filter((category) => {
       const matchesSearch =
         !term ||
-        category.name.toLowerCase().includes(term) ||
-        category.parent_name?.toLowerCase().includes(term)
+        category.name.ar.toLowerCase().includes(term) ||
+        category.name.en.toLowerCase().includes(term) ||
+        category.parent_name?.ar.toLowerCase().includes(term) ||
+        category.parent_name?.en.toLowerCase().includes(term)
 
       const matchesFeatured =
         featuredFilter === "all" ||
@@ -134,11 +157,11 @@ export function CategoriesPage({ initialCategories }: { initialCategories?: any 
           <TableHeader>
             <TableRow>
               <TableHead>الصورة</TableHead>
-              <TableHead>الاسم</TableHead>
+              <TableHead>الاسم (عربي)</TableHead>
+              <TableHead>Name (English)</TableHead>
               <TableHead>التصنيف الرئيسي</TableHead>
               <TableHead>مميزة؟</TableHead>
               <TableHead>تاريخ الإنشاء</TableHead>
-              <TableHead>آخر تحديث</TableHead>
               <TableHead>إجراءات</TableHead>
             </TableRow>
           </TableHeader>
@@ -148,21 +171,38 @@ export function CategoriesPage({ initialCategories }: { initialCategories?: any 
                 <TableCell>
                   {category.image ? (
                     <div className="relative h-10 w-10 overflow-hidden rounded-md border">
-                      <Image src={category.image} alt={category.name} fill sizes="40px" className="object-cover" />
+                      <Image src={category.image} alt={category.name.ar || category.name.en} fill sizes="40px" className="object-cover" />
                     </div>
                   ) : (
                     <span className="text-xs text-gray-400">لا توجد صورة</span>
                   )}
                 </TableCell>
-                <TableCell className="font-medium">{category.name}</TableCell>
-                <TableCell>{category.parent_name || "—"}</TableCell>
+                <TableCell className="font-medium">
+                  <div className="flex flex-col">
+                    <span className="text-sm">{category.name.ar || "—"}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="font-medium">
+                  <div className="flex flex-col">
+                    <span className="text-sm">{category.name.en || "—"}</span>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {category.parent_name ? (
+                    <div className="flex flex-col text-xs">
+                      <span>{category.parent_name.ar || "—"}</span>
+                      <span className="text-gray-500">{category.parent_name.en || "—"}</span>
+                    </div>
+                  ) : (
+                    "—"
+                  )}
+                </TableCell>
                 <TableCell>
                   <Badge variant={category.is_featured ? "default" : "secondary"} className={category.is_featured ? "bg-amber-100 text-amber-800" : ""}>
                     {category.is_featured ? "مميزة" : "عادية"}
                   </Badge>
                 </TableCell>
                 <TableCell>{category.created_at ? new Date(category.created_at).toLocaleDateString() : "—"}</TableCell>
-                <TableCell>{category.updated_at ? new Date(category.updated_at).toLocaleDateString() : "—"}</TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

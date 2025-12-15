@@ -1,0 +1,1686 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Default module",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [],
+  "paths": {
+    "/api/v1/company/warehouses": {
+      "get": {
+        "summary": "List Warehouses",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create Warehouse",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": {
+                "name": "Warehouse Name",
+                "address": "Warehouse Address..",
+                "region_id": 1,
+                "state_id": 1,
+                "city_id": 1,
+                "code": "WRH-4531",
+                "manager_name": "John Doe",
+                "manager_email": "john@doe.com",
+                "manager_phone": "0124535878",
+                "storage_capacity": 100000,
+                "is_active": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/company/warehouses/{id}": {
+      "get": {
+        "summary": "Show Single Warehouse",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update Warehouse Details",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": {
+                "name": "Warehouse New Name",
+                "address": "Warehouse Address..",
+                "region_id": 1,
+                "state_id": 1,
+                "city_id": 1,
+                "code": "WRH-4531",
+                "manager_name": "John Doe",
+                "manager_email": "john@doe.com",
+                "manager_phone": "0124535878",
+                "storage_capacity": 100000,
+                "is_active": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Warehouse",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/company/inventory": {
+      "get": {
+        "summary": "List Movements",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "warehouse_id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sku",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "prev": {
+                          "type": "null"
+                        },
+                        "next": {
+                          "type": "null"
+                        }
+                      },
+                      "required": [
+                        "first",
+                        "last",
+                        "prev",
+                        "next"
+                      ]
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "from": {
+                          "type": "null"
+                        },
+                        "last_page": {
+                          "type": "integer"
+                        },
+                        "links": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "active": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "url",
+                              "label",
+                              "active"
+                            ]
+                          }
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        },
+                        "to": {
+                          "type": "null"
+                        },
+                        "total": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "current_page",
+                        "from",
+                        "last_page",
+                        "links",
+                        "path",
+                        "per_page",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "links",
+                    "meta"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/company/inventory/levels": {
+      "get": {
+        "summary": "List Inventory Levels",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "warehouses",
+            "in": "query",
+            "description": "warehouses ids comma separated",
+            "required": false,
+            "example": "1,2,3",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "on_hand": {
+                            "type": "integer"
+                          },
+                          "reserved": {
+                            "type": "integer"
+                          },
+                          "available": {
+                            "type": "integer"
+                          },
+                          "reorder_point": {
+                            "type": "integer"
+                          },
+                          "restock_level": {
+                            "type": "integer"
+                          },
+                          "needs_reorder": {
+                            "type": "boolean"
+                          },
+                          "restock_quantity_needed": {
+                            "type": "integer"
+                          },
+                          "track_inventory": {
+                            "type": "boolean"
+                          },
+                          "last_counted_at": {
+                            "type": "string"
+                          },
+                          "product": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "sku": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "sku",
+                              "name"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "on_hand",
+                          "reserved",
+                          "available",
+                          "reorder_point",
+                          "restock_level",
+                          "needs_reorder",
+                          "restock_quantity_needed",
+                          "track_inventory",
+                          "last_counted_at",
+                          "product"
+                        ]
+                      }
+                    },
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "prev": {
+                          "type": "null"
+                        },
+                        "next": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "first",
+                        "last",
+                        "prev",
+                        "next"
+                      ]
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "from": {
+                          "type": "integer"
+                        },
+                        "last_page": {
+                          "type": "integer"
+                        },
+                        "links": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "active": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "url",
+                              "label",
+                              "active"
+                            ]
+                          }
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        },
+                        "to": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "current_page",
+                        "from",
+                        "last_page",
+                        "links",
+                        "path",
+                        "per_page",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "links",
+                    "meta"
+                  ]
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": 2,
+                      "on_hand": 190,
+                      "reserved": 1,
+                      "available": 189,
+                      "reorder_point": 15,
+                      "restock_level": 47,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-12T11:20:23.000000Z",
+                      "product": {
+                        "id": 1,
+                        "sku": "SKU-139vi",
+                        "name": "Sleeping Bag"
+                      }
+                    },
+                    {
+                      "id": 5,
+                      "on_hand": 75,
+                      "reserved": 6,
+                      "available": 69,
+                      "reorder_point": 6,
+                      "restock_level": 40,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-05T11:20:23.000000Z",
+                      "product": {
+                        "id": 2,
+                        "sku": "SKU-171us",
+                        "name": "Sleeping Bag"
+                      }
+                    },
+                    {
+                      "id": 8,
+                      "on_hand": 197,
+                      "reserved": 0,
+                      "available": 197,
+                      "reorder_point": 6,
+                      "restock_level": 40,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-21T11:20:23.000000Z",
+                      "product": {
+                        "id": 3,
+                        "sku": "SKU-698oy",
+                        "name": "Sleeping Bag"
+                      }
+                    },
+                    {
+                      "id": 11,
+                      "on_hand": 181,
+                      "reserved": 4,
+                      "available": 177,
+                      "reorder_point": 17,
+                      "restock_level": 81,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-16T11:20:23.000000Z",
+                      "product": {
+                        "id": 4,
+                        "sku": "SKU-210gx",
+                        "name": "Sleeping Bag"
+                      }
+                    },
+                    {
+                      "id": 14,
+                      "on_hand": 59,
+                      "reserved": 1,
+                      "available": 58,
+                      "reorder_point": 5,
+                      "restock_level": 37,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-22T11:20:23.000000Z",
+                      "product": {
+                        "id": 5,
+                        "sku": "SKU-081ye",
+                        "name": "Wireless Gaming Mouse"
+                      }
+                    },
+                    {
+                      "id": 17,
+                      "on_hand": 198,
+                      "reserved": 4,
+                      "available": 194,
+                      "reorder_point": 20,
+                      "restock_level": 83,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-06T11:20:24.000000Z",
+                      "product": {
+                        "id": 6,
+                        "sku": "SKU-054nm",
+                        "name": "Wireless Gaming Mouse"
+                      }
+                    },
+                    {
+                      "id": 20,
+                      "on_hand": 108,
+                      "reserved": 0,
+                      "available": 108,
+                      "reorder_point": 16,
+                      "restock_level": 67,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-16T11:20:24.000000Z",
+                      "product": {
+                        "id": 7,
+                        "sku": "SKU-689vl",
+                        "name": "Wireless Gaming Mouse"
+                      }
+                    },
+                    {
+                      "id": 23,
+                      "on_hand": 62,
+                      "reserved": 5,
+                      "available": 57,
+                      "reorder_point": 6,
+                      "restock_level": 30,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-14T11:20:24.000000Z",
+                      "product": {
+                        "id": 8,
+                        "sku": "SKU-305qp",
+                        "name": "Wireless Gaming Mouse"
+                      }
+                    },
+                    {
+                      "id": 26,
+                      "on_hand": 147,
+                      "reserved": 0,
+                      "available": 147,
+                      "reorder_point": 13,
+                      "restock_level": 31,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-10T11:20:24.000000Z",
+                      "product": {
+                        "id": 9,
+                        "sku": "SKU-778hd",
+                        "name": "Sleeping Bag"
+                      }
+                    },
+                    {
+                      "id": 29,
+                      "on_hand": 57,
+                      "reserved": 0,
+                      "available": 57,
+                      "reorder_point": 20,
+                      "restock_level": 85,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-15T11:20:24.000000Z",
+                      "product": {
+                        "id": 10,
+                        "sku": "SKU-262jj",
+                        "name": "Sleeping Bag"
+                      }
+                    },
+                    {
+                      "id": 32,
+                      "on_hand": 94,
+                      "reserved": 2,
+                      "available": 92,
+                      "reorder_point": 16,
+                      "restock_level": 95,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-26T11:20:24.000000Z",
+                      "product": {
+                        "id": 11,
+                        "sku": "SKU-955lz",
+                        "name": "Sleeping Bag"
+                      }
+                    },
+                    {
+                      "id": 35,
+                      "on_hand": 53,
+                      "reserved": 3,
+                      "available": 50,
+                      "reorder_point": 15,
+                      "restock_level": 90,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-12T11:20:24.000000Z",
+                      "product": {
+                        "id": 12,
+                        "sku": "SKU-344dy",
+                        "name": "Sleeping Bag"
+                      }
+                    },
+                    {
+                      "id": 38,
+                      "on_hand": 96,
+                      "reserved": 0,
+                      "available": 96,
+                      "reorder_point": 16,
+                      "restock_level": 91,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-21T11:20:25.000000Z",
+                      "product": {
+                        "id": 13,
+                        "sku": "SKU-376wx",
+                        "name": "Stainless Steel Cookware Set"
+                      }
+                    },
+                    {
+                      "id": 41,
+                      "on_hand": 69,
+                      "reserved": 1,
+                      "available": 68,
+                      "reorder_point": 15,
+                      "restock_level": 42,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-01T11:20:25.000000Z",
+                      "product": {
+                        "id": 14,
+                        "sku": "SKU-038kw",
+                        "name": "Stainless Steel Cookware Set"
+                      }
+                    },
+                    {
+                      "id": 44,
+                      "on_hand": 71,
+                      "reserved": 5,
+                      "available": 66,
+                      "reorder_point": 20,
+                      "restock_level": 36,
+                      "needs_reorder": false,
+                      "restock_quantity_needed": 0,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-08-31T11:20:25.000000Z",
+                      "product": {
+                        "id": 15,
+                        "sku": "SKU-310vd",
+                        "name": "Stainless Steel Cookware Set"
+                      }
+                    }
+                  ],
+                  "links": {
+                    "first": "https://adilbaba.test/api/v1/company/inventory/levels?page=1",
+                    "last": "https://adilbaba.test/api/v1/company/inventory/levels?page=6",
+                    "prev": null,
+                    "next": "https://adilbaba.test/api/v1/company/inventory/levels?page=2"
+                  },
+                  "meta": {
+                    "current_page": 1,
+                    "from": 1,
+                    "last_page": 6,
+                    "links": [
+                      {
+                        "url": null,
+                        "label": "&laquo; Previous",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/company/inventory/levels?page=1",
+                        "label": "1",
+                        "active": true
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/company/inventory/levels?page=2",
+                        "label": "2",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/company/inventory/levels?page=3",
+                        "label": "3",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/company/inventory/levels?page=4",
+                        "label": "4",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/company/inventory/levels?page=5",
+                        "label": "5",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/company/inventory/levels?page=6",
+                        "label": "6",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/company/inventory/levels?page=2",
+                        "label": "Next &raquo;",
+                        "active": false
+                      }
+                    ],
+                    "path": "https://adilbaba.test/api/v1/company/inventory/levels",
+                    "per_page": 15,
+                    "to": 15,
+                    "total": 84
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/company/inventory/low-stock": {
+      "get": {
+        "summary": "List Inventory Low Stock",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "warehouses",
+            "in": "query",
+            "description": "warehouses ids comma separated",
+            "required": false,
+            "example": "1,2,3",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "on_hand": {
+                            "type": "integer"
+                          },
+                          "reserved": {
+                            "type": "integer"
+                          },
+                          "available": {
+                            "type": "integer"
+                          },
+                          "reorder_point": {
+                            "type": "integer"
+                          },
+                          "restock_level": {
+                            "type": "integer"
+                          },
+                          "needs_reorder": {
+                            "type": "boolean"
+                          },
+                          "restock_quantity_needed": {
+                            "type": "integer"
+                          },
+                          "track_inventory": {
+                            "type": "boolean"
+                          },
+                          "last_counted_at": {
+                            "type": "string"
+                          },
+                          "product": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "sku": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "sku",
+                              "name"
+                            ]
+                          },
+                          "warehouse": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "code": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "code"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "prev": {
+                          "type": "null"
+                        },
+                        "next": {
+                          "type": "null"
+                        }
+                      },
+                      "required": [
+                        "first",
+                        "last",
+                        "prev",
+                        "next"
+                      ]
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "from": {
+                          "type": "integer"
+                        },
+                        "last_page": {
+                          "type": "integer"
+                        },
+                        "links": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "active": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "url",
+                              "label",
+                              "active"
+                            ]
+                          }
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        },
+                        "to": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "current_page",
+                        "from",
+                        "last_page",
+                        "links",
+                        "path",
+                        "per_page",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "links",
+                    "meta"
+                  ]
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": 7,
+                      "on_hand": 18,
+                      "reserved": 0,
+                      "available": 18,
+                      "reorder_point": 18,
+                      "restock_level": 48,
+                      "needs_reorder": true,
+                      "restock_quantity_needed": 30,
+                      "track_inventory": true,
+                      "last_counted_at": "2025-09-12T11:20:23.000000Z",
+                      "product": {
+                        "id": 3,
+                        "sku": "SKU-698oy",
+                        "name": "Sleeping Bag"
+                      },
+                      "warehouse": {
+                        "id": 3,
+                        "name": "Gutmann-Veum Warehouse",
+                        "code": "WH-267809"
+                      }
+                    }
+                  ],
+                  "links": {
+                    "first": "https://adilbaba.test/api/v1/company/inventory/low-stock?page=1",
+                    "last": "https://adilbaba.test/api/v1/company/inventory/low-stock?page=1",
+                    "prev": null,
+                    "next": null
+                  },
+                  "meta": {
+                    "current_page": 1,
+                    "from": 1,
+                    "last_page": 1,
+                    "links": [
+                      {
+                        "url": null,
+                        "label": "&laquo; Previous",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/company/inventory/low-stock?page=1",
+                        "label": "1",
+                        "active": true
+                      },
+                      {
+                        "url": null,
+                        "label": "Next &raquo;",
+                        "active": false
+                      }
+                    ],
+                    "path": "https://adilbaba.test/api/v1/company/inventory/low-stock",
+                    "per_page": 15,
+                    "to": 1,
+                    "total": 1
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/company/inventory/history": {
+      "get": {
+        "summary": "List SKU History",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "sku_id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "3",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "warehouse_id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "integer"
+                          },
+                          "reserved_delta": {
+                            "type": "integer"
+                          },
+                          "on_hand_delta": {
+                            "type": "integer"
+                          },
+                          "notes": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "string"
+                          },
+                          "performedBy": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "email"
+                            ]
+                          },
+                          "warehouse": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "code": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "code"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "quantity",
+                          "reserved_delta",
+                          "on_hand_delta",
+                          "notes",
+                          "created_at",
+                          "performedBy",
+                          "warehouse"
+                        ]
+                      }
+                    },
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "prev": {
+                          "type": "null"
+                        },
+                        "next": {
+                          "type": "null"
+                        }
+                      },
+                      "required": [
+                        "first",
+                        "last",
+                        "prev",
+                        "next"
+                      ]
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "from": {
+                          "type": "integer"
+                        },
+                        "last_page": {
+                          "type": "integer"
+                        },
+                        "links": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "active": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "url",
+                              "label",
+                              "active"
+                            ]
+                          }
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        },
+                        "to": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "current_page",
+                        "from",
+                        "last_page",
+                        "links",
+                        "path",
+                        "per_page",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "links",
+                    "meta"
+                  ]
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": 35,
+                      "type": "return",
+                      "quantity": 2,
+                      "reserved_delta": 0,
+                      "on_hand_delta": 2,
+                      "notes": "Returned from customer Brown",
+                      "created_at": "2025-09-29T11:20:23.000000Z",
+                      "performedBy": {
+                        "id": 1,
+                        "name": "Test User",
+                        "email": "test@example.com"
+                      },
+                      "warehouse": {
+                        "id": 3,
+                        "name": "Gutmann-Veum Warehouse",
+                        "code": "WH-267809"
+                      }
+                    },
+                    {
+                      "id": 33,
+                      "type": "ship",
+                      "quantity": 10,
+                      "reserved_delta": -10,
+                      "on_hand_delta": -10,
+                      "notes": "Shipped to order #4265",
+                      "created_at": "2025-09-15T11:20:23.000000Z",
+                      "performedBy": {
+                        "id": 1,
+                        "name": "Test User",
+                        "email": "test@example.com"
+                      },
+                      "warehouse": {
+                        "id": 3,
+                        "name": "Gutmann-Veum Warehouse",
+                        "code": "WH-267809"
+                      }
+                    },
+                    {
+                      "id": 34,
+                      "type": "damage",
+                      "quantity": 1,
+                      "reserved_delta": 0,
+                      "on_hand_delta": -1,
+                      "notes": "Damaged during inspection",
+                      "created_at": "2025-09-12T11:20:23.000000Z",
+                      "performedBy": {
+                        "id": 1,
+                        "name": "Test User",
+                        "email": "test@example.com"
+                      },
+                      "warehouse": {
+                        "id": 3,
+                        "name": "Gutmann-Veum Warehouse",
+                        "code": "WH-267809"
+                      }
+                    },
+                    {
+                      "id": 39,
+                      "type": "return",
+                      "quantity": 2,
+                      "reserved_delta": 0,
+                      "on_hand_delta": 2,
+                      "notes": "Returned from customer Brown",
+                      "created_at": "2025-09-10T11:20:23.000000Z",
+                      "performedBy": {
+                        "id": 1,
+                        "name": "Test User",
+                        "email": "test@example.com"
+                      },
+                      "warehouse": {
+                        "id": 1,
+                        "name": "Rice PLC Warehouse",
+                        "code": "WH-740798"
+                      }
+                    },
+                    {
+                      "id": 37,
+                      "type": "return",
+                      "quantity": 5,
+                      "reserved_delta": 0,
+                      "on_hand_delta": 5,
+                      "notes": "Returned from customer Johnson",
+                      "created_at": "2025-09-06T11:20:23.000000Z",
+                      "performedBy": {
+                        "id": 1,
+                        "name": "Test User",
+                        "email": "test@example.com"
+                      },
+                      "warehouse": {
+                        "id": 2,
+                        "name": "McGlynn-Bosco Warehouse",
+                        "code": "WH-714942"
+                      }
+                    },
+                    {
+                      "id": 40,
+                      "type": "reserve",
+                      "quantity": 4,
+                      "reserved_delta": 4,
+                      "on_hand_delta": 0,
+                      "notes": "Reserved for order #5898",
+                      "created_at": "2025-09-02T11:20:23.000000Z",
+                      "performedBy": {
+                        "id": 1,
+                        "name": "Test User",
+                        "email": "test@example.com"
+                      },
+                      "warehouse": {
+                        "id": 1,
+                        "name": "Rice PLC Warehouse",
+                        "code": "WH-740798"
+                      }
+                    },
+                    {
+                      "id": 36,
+                      "type": "receive",
+                      "quantity": 192,
+                      "reserved_delta": 0,
+                      "on_hand_delta": 192,
+                      "notes": "Initial stock",
+                      "created_at": "2025-08-08T11:20:23.000000Z",
+                      "performedBy": {
+                        "id": 1,
+                        "name": "Test User",
+                        "email": "test@example.com"
+                      },
+                      "warehouse": {
+                        "id": 2,
+                        "name": "McGlynn-Bosco Warehouse",
+                        "code": "WH-714942"
+                      }
+                    },
+                    {
+                      "id": 38,
+                      "type": "receive",
+                      "quantity": 44,
+                      "reserved_delta": 0,
+                      "on_hand_delta": 44,
+                      "notes": "Initial stock",
+                      "created_at": "2025-08-04T11:20:23.000000Z",
+                      "performedBy": {
+                        "id": 1,
+                        "name": "Test User",
+                        "email": "test@example.com"
+                      },
+                      "warehouse": {
+                        "id": 1,
+                        "name": "Rice PLC Warehouse",
+                        "code": "WH-740798"
+                      }
+                    },
+                    {
+                      "id": 32,
+                      "type": "receive",
+                      "quantity": 27,
+                      "reserved_delta": 0,
+                      "on_hand_delta": 27,
+                      "notes": "Initial stock",
+                      "created_at": "2025-08-04T11:20:23.000000Z",
+                      "performedBy": {
+                        "id": 1,
+                        "name": "Test User",
+                        "email": "test@example.com"
+                      },
+                      "warehouse": {
+                        "id": 3,
+                        "name": "Gutmann-Veum Warehouse",
+                        "code": "WH-267809"
+                      }
+                    }
+                  ],
+                  "links": {
+                    "first": "https://adilbaba.test/api/v1/company/inventory/history?page=1",
+                    "last": "https://adilbaba.test/api/v1/company/inventory/history?page=1",
+                    "prev": null,
+                    "next": null
+                  },
+                  "meta": {
+                    "current_page": 1,
+                    "from": 1,
+                    "last_page": 1,
+                    "links": [
+                      {
+                        "url": null,
+                        "label": "&laquo; Previous",
+                        "active": false
+                      },
+                      {
+                        "url": "https://adilbaba.test/api/v1/company/inventory/history?page=1",
+                        "label": "1",
+                        "active": true
+                      },
+                      {
+                        "url": null,
+                        "label": "Next &raquo;",
+                        "active": false
+                      }
+                    ],
+                    "path": "https://adilbaba.test/api/v1/company/inventory/history",
+                    "per_page": 15,
+                    "to": 9,
+                    "total": 9
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/company/inventory/operate": {
+      "post": {
+        "summary": "Inventory Operation",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": "{\n    \"sku_id\": 123,\n    \"warehouse_id\": 5,\n    \"type\": \"reserve\", // receive || ship || reserve || release_reservation || adjust || count || return || damage || loss || transfer\n    \"quantity\": 10,\n    \"notes\": \"Initial stock purchase\" // Nullable\n    \n    // Example for a transfer operation:\n    // \"type\": \"transfer\",\n    // \"to_warehouse_id\": 6, // Required when type is \"transfer\"\n    // \"notes\": \"Moving stock to secondary warehouse\"\n}"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": "Inventory movement done successfully."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "responses": {},
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "servers": [],
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
+}

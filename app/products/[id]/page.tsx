@@ -94,8 +94,9 @@ function normalizeProduct(input: any) {
   }
 }
 
-export default async function ProductDetailsPage({ params }: { params: { id: string } }) {
-  const raw = await getProduct(params.id)
+export default async function ProductDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const raw = await getProduct(id)
   const product = normalizeProduct(raw)
 
   return (

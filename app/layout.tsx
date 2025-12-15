@@ -4,6 +4,7 @@ import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import ConditionalShell from '@/components/conditional-shell'
+import { Toaster } from '@/components/ui/toaster'
 
 export const metadata: Metadata = {
   title: 'Admin - Dashboard',
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="ar" dir="rtl">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         <ConditionalShell>{children}</ConditionalShell>
+        <Toaster />
         <Analytics />
       </body>
     </html>

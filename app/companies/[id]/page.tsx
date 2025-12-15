@@ -97,8 +97,9 @@ function normalizeCompany(input: any) {
   }
 }
 
-export default async function CompanyDetailsPage({ params }: { params: { id: string } }) {
-  const raw = await getCompany(params.id)
+export default async function CompanyDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const raw = await getCompany(id)
   const company = normalizeCompany(raw)
 
   return (

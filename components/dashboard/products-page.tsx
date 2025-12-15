@@ -6,13 +6,24 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Search, MoreHorizontal, Loader2, Eye } from "lucide-react"
+import { Search, MoreHorizontal, Loader2, Eye, Package, Trash2, Ban } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { apiService } from "@/lib/api"
 import Link from "next/link"
+import { toast } from "@/components/ui/use-toast"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 type ProductUnit = string | { id?: number; name?: string }
 
@@ -39,9 +50,10 @@ type Product = {
   moq?: number
   unit?: ProductUnit
   price_type?: string
-  is_active?: boolean
+  is_admin_active?: boolean
   category?: ProductCategory
   variants_count?: number
+  image?: string
 }
 
 type ProductDetail = Product & {
@@ -65,6 +77,25 @@ function normalizeProductSummary(input: any): Product {
         ? input.category
         : undefined
 
+  const resolvedImageCandidate =
+    input?.image ??
+    input?.thumbnail ??
+    input?.thumbnail_url ??
+    input?.image_url ??
+    input?.main_image ??
+    input?.main_image_url ??
+    input?.cover ??
+    input?.cover_image ??
+    input?.cover_image_url ??
+    input?.photo ??
+    input?.photo_url ??
+    input?.featured_image ??
+    input?.featured_image_url ??
+    (Array.isArray(input?.media) ? input.media?.[0]?.url : undefined) ??
+    categoryObject?.image
+
+  const resolvedImage = typeof resolvedImageCandidate === "string" ? resolvedImageCandidate : undefined
+
   return {
     id: Number(input?.id ?? 0),
     name: input?.name ?? "",
@@ -79,15 +110,20 @@ function normalizeProductSummary(input: any): Product {
             ? { name: input.unit_name }
             : undefined,
     price_type: input?.price_type ?? input?.pricing_type ?? undefined,
-    is_active:
-      typeof input?.is_active === "boolean"
-        ? input.is_active
-        : input?.is_active != null
-          ? Boolean(Number(input.is_active))
-          : input?.status
-            ? String(input.status).toLowerCase() === "active"
-            : undefined,
+    is_admin_active:
+      typeof input?.is_admin_active === "boolean"
+        ? input.is_admin_active
+        : input?.is_admin_active != null
+          ? Boolean(Number(input.is_admin_active))
+          : typeof input?.is_active === "boolean"
+            ? input.is_active
+            : input?.is_active != null
+              ? Boolean(Number(input.is_active))
+              : input?.status
+                ? String(input.status).toLowerCase() === "active"
+                : undefined,
     category: normalizedCategory,
+    image: resolvedImage,
     variants_count:
       input?.variants_count != null
         ? Number(input.variants_count)
@@ -102,45 +138,6 @@ function normalizeProductList(payload: any): Product[] {
   return items.map(normalizeProductSummary)
 }
 
-function normalizeProductDetail(payload: any): ProductDetail {
-  const base = normalizeProductSummary(payload)
-  const media: ProductMedia[] = Array.isArray(payload?.media)
-    ? payload.media
-        .filter((item: any) => item?.url)
-        .map((item: any) => ({
-          id: Number(item?.id ?? Math.random()),
-          name: item?.name ?? undefined,
-          url: item?.url,
-          type: item?.type ?? undefined,
-        }))
-    : []
-
-  const skus: ProductSku[] | undefined = Array.isArray(payload?.skus)
-    ? payload.skus.map((sku: any) => ({
-        id: Number(sku?.id ?? 0),
-        code: sku?.code ?? undefined,
-        price: sku?.price ?? undefined,
-        inventory: sku?.inventory != null ? Number(sku.inventory) : undefined,
-      }))
-    : undefined
-
-  const tieredPrices = Array.isArray(payload?.tieredPrices)
-    ? payload.tieredPrices.map((tier: any) => ({
-        minQuantity: tier?.minQuantity != null ? Number(tier.minQuantity) : undefined,
-        price: tier?.price ?? undefined,
-      }))
-    : undefined
-
-  return {
-    ...base,
-    description: payload?.description ?? payload?.long_description ?? base.short_description,
-    media,
-    supplier_name: payload?.supplier?.name ?? undefined,
-    tiered_prices: tieredPrices,
-    skus,
-  }
-}
-
 export function ProductsPage({ initialProducts }: { initialProducts?: Product[] }) {
   const [products, setProducts] = useState<Product[]>(() => normalizeProductList(initialProducts))
   const [searchTerm, setSearchTerm] = useState("")
@@ -150,13 +147,17 @@ export function ProductsPage({ initialProducts }: { initialProducts?: Product[] 
   const [detailLoading, setDetailLoading] = useState(false)
   const [detailError, setDetailError] = useState<string | null>(null)
   const [productDetail, setProductDetail] = useState<ProductDetail | null>(null)
-
+  const [actionState, setActionState] = useState<{
+    open: boolean
+    type: "delete" | "deactivate" | null
+    product: Product | null
+  }>({ open: false, type: null, product: null })
+  const [isActingOnId, setIsActingOnId] = useState<number | null>(null)
   const closeDetail = () => {
     setIsDetailOpen(false)
     setProductDetail(null)
     setDetailError(null)
   }
-
   const loadProducts = async () => {
     try {
       const res = await apiService.fetchProducts()
@@ -168,28 +169,107 @@ export function ProductsPage({ initialProducts }: { initialProducts?: Product[] 
     }
   }
 
+  const handleDeactivate = async (product: Product) => {
+    try {
+      setIsActingOnId(product.id)
+      // Backend expects a full update payload (PUT), so we fetch current product first
+      // and then resend required fields with is_active=false.
+      const res = await apiService.fetchProduct(product.id)
+      const payload = res?.data ?? res
+      const current = payload?.data ?? payload
+
+      const categoryId =
+        current?.category_id ??
+        current?.category?.id ??
+        (typeof current?.category === "number" ? current.category : undefined)
+      const unitId =
+        current?.product_unit_id ??
+        current?.unit_id ??
+        current?.unit?.id ??
+        (typeof current?.unit === "number" ? current.unit : undefined)
+
+      const updateBody = {
+        product: {
+          name: current?.name,
+          description: current?.description ?? current?.short_description ?? "",
+          moq: current?.moq,
+          product_unit_id: unitId,
+          price_type: current?.price_type ?? current?.pricing_type,
+          is_admin_active: false,
+          // Backward compatibility: some backends still expect `is_active` on update (PUT).
+          is_active: false,
+          category_id: categoryId,
+        },
+      }
+
+      const missingRequired: string[] = []
+      if (!updateBody.product.name) missingRequired.push("name")
+      if (updateBody.product.moq == null) missingRequired.push("moq")
+      if (!updateBody.product.product_unit_id) missingRequired.push("product_unit_id")
+      if (!updateBody.product.price_type) missingRequired.push("price_type")
+      if (!updateBody.product.category_id) missingRequired.push("category_id")
+      // description is required in your backend errors, so enforce it too.
+      if (!updateBody.product.description) missingRequired.push("description")
+
+      if (missingRequired.length) {
+        toast({
+          title: "لا يمكن إيقاف المنتج",
+          description: `البيانات المطلوبة ناقصة: ${missingRequired.join(", ")}`,
+          variant: "destructive",
+        })
+        return
+      }
+
+      const updateResponse = await apiService.updateProduct(product.id, updateBody)
+      console.log("[v0] Update response:", updateResponse?.data)
+      
+      // Reload products list to ensure we have the latest data from server
+      await loadProducts()
+      
+      toast({ title: "تم الإيقاف", description: `تم إيقاف المنتج ${product.name ? `"${product.name}"` : ""} بنجاح` })
+    } catch (err: any) {
+      console.error("[v0] Deactivate error:", err)
+      const message = err?.response?.data?.message || err?.message || "فشل إيقاف المنتج"
+      const errorDetails = err?.response?.data?.errors ? JSON.stringify(err.response.data.errors) : ""
+      toast({ 
+        title: "خطأ", 
+        description: errorDetails ? `${message}\n${errorDetails}` : message, 
+        variant: "destructive" 
+      })
+    } finally {
+      setIsActingOnId(null)
+    }
+  }
+
+  const handleDelete = async (product: Product) => {
+    try {
+      setIsActingOnId(product.id)
+      await apiService.deleteProduct(product.id)
+      setProducts((prev) => prev.filter((p) => p.id !== product.id))
+      toast({ title: "تم الحذف", description: `تم حذف المنتج ${product.name ? `"${product.name}"` : ""} بنجاح` })
+    } catch (err: any) {
+      const message = err?.response?.data?.message || err?.message || "فشل حذف المنتج"
+      toast({ title: "خطأ", description: message, variant: "destructive" })
+    } finally {
+      setIsActingOnId(null)
+    }
+  }
+
+  const onConfirmAction = async () => {
+    if (!actionState.product || !actionState.type) return
+    if (actionState.type === "deactivate") {
+      await handleDeactivate(actionState.product)
+    } else if (actionState.type === "delete") {
+      await handleDelete(actionState.product)
+    }
+    setActionState({ open: false, type: null, product: null })
+  }
+
   useEffect(() => {
     if (initialProducts === undefined) {
       loadProducts()
     }
   }, [initialProducts])
-
-  const handleViewProduct = async (productId: number) => {
-    setIsDetailOpen(true)
-    setDetailLoading(true)
-    setDetailError(null)
-    setProductDetail(null)
-
-    try {
-      const response = await apiService.fetchProduct(productId)
-      const payload = response?.data?.data ?? response?.data ?? response
-      setProductDetail(normalizeProductDetail(payload))
-    } catch (err: any) {
-      setDetailError(err?.response?.data?.message || err?.message || "تعذر تحميل تفاصيل المنتج")
-    } finally {
-      setDetailLoading(false)
-    }
-  }
 
   const filtered = useMemo(() => {
     const q = searchTerm.toLowerCase()
@@ -200,8 +280,8 @@ export function ProductsPage({ initialProducts }: { initialProducts?: Product[] 
 
       const okActive =
         !filters.active ||
-        (filters.active === "true" && p.is_active) ||
-        (filters.active === "false" && p.is_active === false)
+        (filters.active === "true" && p.is_admin_active) ||
+        (filters.active === "false" && p.is_admin_active === false)
 
       const okPrice = !filters.price_type || p.price_type === filters.price_type
 
@@ -219,7 +299,6 @@ export function ProductsPage({ initialProducts }: { initialProducts?: Product[] 
       </div>
     )
   }
-
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-4">
@@ -270,18 +349,31 @@ export function ProductsPage({ initialProducts }: { initialProducts?: Product[] 
           <TableBody>
             {filtered.map((p) => (
               <TableRow key={p.id} className="cursor-pointer" onClick={() => (window.location.href = `/products/${p.id}`)}>
-                <TableCell className="font-medium">
+                <TableCell className="font-medium flex items-center gap-2">
+                  {/* adding image beside the name  */}
+                  <div className="flex items-center gap-2">
+                      {p.image ? (
+                        <div className="relative h-10 w-10 overflow-hidden rounded-md border">
+                          <Image src={p.image} alt={p.name} fill sizes="40px" className="object-cover" />
+                        </div>
+                      ) : (
+                        <Package className="h-4 w-4" />
+                      )}
                   <Link href={`/products/${p.id}`} className="hover:underline" onClick={(e) => e.stopPropagation()}>
                     {p.name}
                   </Link>
-                </TableCell>
+                  </div>
+                  </TableCell>
                 <TableCell className="max-w-xs truncate">{p.short_description || "-"}</TableCell>
                 <TableCell>{p.moq ?? "-"}</TableCell>
                 <TableCell>{typeof p.unit === "string" ? p.unit : p.unit?.name || "-"}</TableCell>
                 <TableCell>{p.price_type || "-"}</TableCell>
                 <TableCell>
-                  <Badge variant={p.is_active ? "default" : "secondary"} className={p.is_active ? "bg-green-100 text-green-800" : ""}>
-                    {p.is_active ? "نشط" : "غير نشط"}
+                  <Badge
+                    variant={p.is_admin_active ? "default" : "secondary"}
+                    className={p.is_admin_active ? "bg-green-100 text-green-800" : ""}
+                  >
+                    {p.is_admin_active ? "نشط" : "غير نشط"}
                   </Badge>
                 </TableCell>
                 <TableCell>{typeof p.category === "string" ? p.category : p.category?.name || "-"}</TableCell>
@@ -289,7 +381,7 @@ export function ProductsPage({ initialProducts }: { initialProducts?: Product[] 
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
+                      <Button variant="ghost" className="h-8 w-8 p-0" onClick={(e) => e.stopPropagation()}>
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -300,8 +392,27 @@ export function ProductsPage({ initialProducts }: { initialProducts?: Product[] 
                           عرض التفاصيل
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>تعديل</DropdownMenuItem>
-                      <DropdownMenuItem className="text-red-600">حذف</DropdownMenuItem>
+                      <DropdownMenuItem
+                        disabled={isActingOnId !== null || p.is_admin_active === false}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setActionState({ open: true, type: "deactivate", product: p })
+                        }}
+                      >
+                        <Ban className="mr-2 h-4 w-4" />
+                        إيقاف المنتج
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="text-red-600"
+                        disabled={isActingOnId !== null}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setActionState({ open: true, type: "delete", product: p })
+                        }}
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        حذف
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
@@ -310,6 +421,35 @@ export function ProductsPage({ initialProducts }: { initialProducts?: Product[] 
           </TableBody>
         </Table>
       </Card>
+
+      <AlertDialog open={actionState.open} onOpenChange={(open) => setActionState((s) => ({ ...s, open }))}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {actionState.type === "delete" ? "تأكيد الحذف" : actionState.type === "deactivate" ? "تأكيد الإيقاف" : "تأكيد العملية"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {actionState.type === "delete"
+                ? `هل أنت متأكد من حذف المنتج ${actionState.product?.name ? `"${actionState.product.name}"` : ""}؟ لا يمكن التراجع عن هذا الإجراء.`
+                : actionState.type === "deactivate"
+                  ? `هل أنت متأكد من إيقاف المنتج ${actionState.product?.name ? `"${actionState.product.name}"` : ""}؟ يمكن إعادة تفعيله لاحقاً.`
+                  : "هل أنت متأكد من تنفيذ هذه العملية؟"}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isActingOnId !== null}>إلغاء</AlertDialogCancel>
+            <AlertDialogAction onClick={onConfirmAction} disabled={isActingOnId !== null}>
+              {isActingOnId !== null
+                ? "جارٍ التنفيذ..."
+                : actionState.type === "delete"
+                  ? "تأكيد الحذف"
+                  : actionState.type === "deactivate"
+                    ? "تأكيد الإيقاف"
+                    : "تأكيد"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <Dialog
         open={isDetailOpen}

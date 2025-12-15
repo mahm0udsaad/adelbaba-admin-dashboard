@@ -6,11 +6,12 @@ import { getVariationValues } from "@/lib/server-actions"
 export const dynamic = "force-dynamic"
 
 interface Props {
-  params: { variationId: string }
+  params: Promise<{ variationId: string }>
 }
 
 export default async function VariationValuesRoutePage({ params }: Props) {
-  const values = await getVariationValues(params.variationId)
+  const { variationId } = await params
+  const values = await getVariationValues(variationId)
   return (
     <Suspense
       fallback={

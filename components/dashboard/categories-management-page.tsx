@@ -47,12 +47,18 @@ import { useToast } from "@/components/ui/use-toast"
 
 type Category = {
   id: number
-  name: string
+  name: {
+    ar: string
+    en: string
+  }
   icon?: string
   image?: string
   parent?: {
     id: number
-    name: string
+    name: {
+      ar: string
+      en: string
+    }
   } | null
   featured: boolean
   created_at?: string
@@ -75,13 +81,15 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
   // Form states
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const [formData, setFormData] = useState<{
-    name: string
+    name_ar: string
+    name_en: string
     icon: string
     parent_id?: number
     featured: boolean
     image?: File | null
   }>({
-    name: "",
+    name_ar: "",
+    name_en: "",
     icon: "",
     featured: false,
     image: null,
@@ -131,7 +139,8 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
   // Reset form
   const resetForm = () => {
     setFormData({
-      name: "",
+      name_ar: "",
+      name_en: "",
       icon: "",
       featured: false,
       image: null,
@@ -172,7 +181,8 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
 
       setSelectedCategory(fullCategory)
       setFormData({
-        name: fullCategory.name,
+        name_ar: typeof fullCategory.name === 'object' ? fullCategory.name.ar : fullCategory.name || "",
+        name_en: typeof fullCategory.name === 'object' ? fullCategory.name.en : fullCategory.name || "",
         icon: fullCategory.icon || "",
         parent_id: fullCategory.parent?.id,
         featured: fullCategory.featured,
@@ -217,8 +227,8 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
 
   // Create category
   const handleCreateCategory = async () => {
-    if (!formData.name.trim()) {
-      setFormError("اسم الفئة مطلوب")
+    if (!formData.name_ar.trim() || !formData.name_en.trim()) {
+      setFormError("اسم الفئة باللغتين العربية والإنجليزية مطلوب")
       return
     }
 
@@ -227,7 +237,9 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
       setFormError(null)
 
       const formDataToSend = new FormData()
-      formDataToSend.append("name", formData.name.trim())
+      // Send bilingual name as JSON object
+      formDataToSend.append("name[ar]", formData.name_ar.trim())
+      formDataToSend.append("name[en]", formData.name_en.trim())
       formDataToSend.append("icon", formData.icon || "")
       formDataToSend.append("featured", formData.featured ? "1" : "0")
       if (formData.parent_id) {
@@ -266,8 +278,8 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
   const handleUpdateCategory = async () => {
     if (!selectedCategory) return
 
-    if (!formData.name.trim()) {
-      setFormError("اسم الفئة مطلوب")
+    if (!formData.name_ar.trim() || !formData.name_en.trim()) {
+      setFormError("اسم الفئة باللغتين العربية والإنجليزية مطلوب")
       return
     }
 
@@ -276,7 +288,9 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
       setFormError(null)
 
       const formDataToSend = new FormData()
-      formDataToSend.append("name", formData.name.trim())
+      // Send bilingual name as JSON object
+      formDataToSend.append("name[ar]", formData.name_ar.trim())
+      formDataToSend.append("name[en]", formData.name_en.trim())
       formDataToSend.append("icon", formData.icon || "")
       formDataToSend.append("featured", formData.featured ? "1" : "0")
       if (formData.parent_id) {
@@ -343,7 +357,10 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
   const parentCategories = categories.filter((c) => !c.parent)
 
   const filteredCategories = categories.filter((c) => {
-    const matchesSearch = c.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = 
+      (typeof c.name === 'object' 
+        ? c.name.ar?.toLowerCase().includes(searchTerm.toLowerCase()) || c.name.en?.toLowerCase().includes(searchTerm.toLowerCase())
+        : c.name?.toLowerCase().includes(searchTerm.toLowerCase()))
     
     if (viewMode === "parents") {
       return matchesSearch && !c.parent
@@ -373,7 +390,11 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
               <ArrowRight className="h-4 w-4 rotate-180" />
             </BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbPage>{currentParent.name}</BreadcrumbPage>
+              <BreadcrumbPage>
+                {typeof currentParent.name === 'object' 
+                  ? `${currentParent.name.ar} / ${currentParent.name.en}`
+                  : currentParent.name}
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -417,7 +438,7 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
           </Button>
           {currentParent && (
             <Badge variant="secondary" className="text-sm py-1.5 px-3">
-              عرض فئات فرعية لـ: {currentParent.name}
+              عرض فئات فرعية لـ: {typeof currentParent.name === 'object' ? currentParent.name.ar : currentParent.name}
             </Badge>
           )}
         </div>
@@ -445,7 +466,7 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
           ) : filteredCategories.length === 0 ? (
             <div className="text-center p-8 text-gray-500">
               {viewMode === "children" && currentParent
-                ? `لا توجد فئات فرعية لـ "${currentParent.name}"`
+                ? `لا توجد فئات فرعية لـ "${typeof currentParent.name === 'object' ? currentParent.name.ar : currentParent.name}"`
                 : searchTerm
                 ? "لا توجد نتائج للبحث"
                 : "لا توجد فئات"}
@@ -456,7 +477,8 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
                 <TableHeader>
                   <TableRow>
                     <TableHead>الصورة</TableHead>
-                    <TableHead>الاسم</TableHead>
+                    <TableHead>الاسم (عربي)</TableHead>
+                    <TableHead>Name (English)</TableHead>
                     <TableHead>الأيقونة</TableHead>
                     <TableHead>الفئة الأم</TableHead>
                     <TableHead>الفئات الفرعية</TableHead>
@@ -471,7 +493,7 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
                         {category.image ? (
                           <img
                             src={category.image}
-                            alt={category.name}
+                            alt={typeof category.name === 'object' ? category.name.ar : category.name}
                             className="w-12 h-12 object-cover rounded-md"
                           />
                         ) : (
@@ -480,7 +502,12 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
                           </div>
                         )}
                       </TableCell>
-                      <TableCell className="font-medium">{category.name}</TableCell>
+                      <TableCell className="font-medium">
+                        {typeof category.name === 'object' ? category.name.ar : category.name}
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {typeof category.name === 'object' ? category.name.en : category.name}
+                      </TableCell>
                       <TableCell>
                         {category.icon ? (
                           <span className="text-sm text-gray-600">{category.icon}</span>
@@ -490,7 +517,14 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
                       </TableCell>
                       <TableCell>
                         {category.parent ? (
-                          <Badge variant="outline">{category.parent.name}</Badge>
+                          <div className="flex flex-col text-xs">
+                            <Badge variant="outline" className="mb-1">
+                              {typeof category.parent.name === 'object' ? category.parent.name.ar : category.parent.name}
+                            </Badge>
+                            <span className="text-gray-500">
+                              {typeof category.parent.name === 'object' ? category.parent.name.en : ''}
+                            </span>
+                          </div>
                         ) : (
                           <span className="text-sm text-gray-400">-</span>
                         )}
@@ -566,12 +600,22 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="name">اسم الفئة</Label>
+              <Label htmlFor="name_ar">اسم الفئة (بالعربية)</Label>
               <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                id="name_ar"
+                value={formData.name_ar}
+                onChange={(e) => setFormData({ ...formData, name_ar: e.target.value })}
                 placeholder="مثال: إلكترونيات"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="name_en">اسم الفئة (بالإنجليزية)</Label>
+              <Input
+                id="name_en"
+                value={formData.name_en}
+                onChange={(e) => setFormData({ ...formData, name_en: e.target.value })}
+                placeholder="Example: Electronics"
               />
             </div>
 
@@ -600,7 +644,9 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
                   <SelectItem value="none">بدون فئة أم</SelectItem>
                   {parentCategories.map((category) => (
                     <SelectItem key={category.id} value={category.id.toString()}>
-                      {category.name}
+                      {typeof category.name === 'object' 
+                        ? `${category.name.ar} / ${category.name.en}`
+                        : category.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -680,12 +726,22 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="edit-name">اسم الفئة</Label>
+              <Label htmlFor="edit-name_ar">اسم الفئة (بالعربية)</Label>
               <Input
-                id="edit-name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                id="edit-name_ar"
+                value={formData.name_ar}
+                onChange={(e) => setFormData({ ...formData, name_ar: e.target.value })}
                 placeholder="مثال: إلكترونيات"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-name_en">اسم الفئة (بالإنجليزية)</Label>
+              <Input
+                id="edit-name_en"
+                value={formData.name_en}
+                onChange={(e) => setFormData({ ...formData, name_en: e.target.value })}
+                placeholder="Example: Electronics"
               />
             </div>
 
@@ -719,7 +775,9 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
                     .filter((c) => c.id !== selectedCategory?.id)
                     .map((category) => (
                       <SelectItem key={category.id} value={category.id.toString()}>
-                        {category.name}
+                        {typeof category.name === 'object' 
+                          ? `${category.name.ar} / ${category.name.en}`
+                          : category.name}
                       </SelectItem>
                     ))}
                 </SelectContent>
@@ -788,7 +846,9 @@ export function CategoriesManagementPage({ initialCategories }: { initialCategor
           <AlertDialogHeader>
             <AlertDialogTitle>تأكيد الحذف</AlertDialogTitle>
             <AlertDialogDescription>
-              هل أنت متأكد من حذف الفئة "{selectedCategory?.name}"؟ لا يمكن التراجع عن هذا الإجراء.
+              هل أنت متأكد من حذف الفئة "{selectedCategory && typeof selectedCategory.name === 'object' 
+                ? `${selectedCategory.name.ar} / ${selectedCategory.name.en}` 
+                : selectedCategory?.name}"؟ لا يمكن التراجع عن هذا الإجراء.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
