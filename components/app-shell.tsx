@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { BarChart3, Building2, Headphones, Menu, Users, Filter, Megaphone, Package, Shield, Star, CreditCard, Layers, ShoppingCart } from "lucide-react"
+import { BarChart3, Building2, Headphones, Menu, Users, Filter, Megaphone, Package, Shield, Star, CreditCard, Layers, ShoppingCart, UserCog } from "lucide-react"
 
 type NavItem = {
   name: string
@@ -20,6 +20,7 @@ const navItems: NavItem[] = [
   { name: "الشركات", id: "companies", href: "/companies", icon: Building2 },
   { name: "طلبات توثيق الموردين", id: "verification-requests", href: "/admin/verification/requests", icon: Shield },
   { name: "المستخدمون", id: "users", href: "/users", icon: Users },
+  { name: "الموظفون والمديرون", id: "employees", href: "/employees", icon: UserCog },
   { name: "تذاكر الدعم", id: "tickets", href: "/support-tickets", icon: Headphones },
   { name: "الأدوار والصلاحيات", id: "roles", href: "/roles", icon: Shield },
   { name: "الإعلانات", id: "ads", href: "/ads", icon: Megaphone },
@@ -37,6 +38,7 @@ const titles: Record<string, { title: string; subtitle: string }> = {
   "/companies": { title: "الشركات", subtitle: "إدارة الشركات المسجلة ومعلوماتها" },
   "/admin/verification/requests": { title: "طلبات توثيق الموردين", subtitle: "إدارة طلبات توثيق الشركات والموردين" },
   "/users": { title: "المستخدمون", subtitle: "إدارة حسابات المستخدمين والأذونات" },
+  "/employees": { title: "الموظفون والمديرون", subtitle: "إدارة حسابات الموظفين والمديرين" },
   "/support-tickets": { title: "تذاكر الدعم", subtitle: "التعامل مع طلبات ودعم العملاء" },
   "/roles": { title: "الأدوار والصلاحيات", subtitle: "إدارة الأدوار وتعيين الصلاحيات" },
   "/orders": { title: "الطلبات", subtitle: "إدارة الطلبات والمدفوعات" },
