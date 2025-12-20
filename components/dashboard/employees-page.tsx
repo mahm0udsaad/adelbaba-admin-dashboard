@@ -355,14 +355,6 @@ export function EmployeesPage() {
   return (
     <div className="space-y-4 p-4 md:p-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-            إدارة الموظفين
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            إضافة وإدارة حسابات الموظفين والمديرين
-          </p>
-        </div>
         <Button onClick={handleCreate} className="bg-amber-600 hover:bg-amber-700 w-full sm:w-auto">
           <UserPlus className="ml-2 rtl:mr-2 rtl:ml-0 h-4 w-4" />
           إضافة موظف جديد
