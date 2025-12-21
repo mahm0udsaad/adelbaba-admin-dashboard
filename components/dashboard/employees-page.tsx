@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Search, MoreHorizontal, Edit, Trash2, Loader2, Plus, UserPlus } from "lucide-react"
+import { Search, MoreHorizontal, Edit, Trash2, Loader2, Plus, UserPlus, RefreshCw } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
@@ -216,9 +216,6 @@ export function EmployeesPage() {
       const res = await apiService.createManagementUser(formData)
       const newEmployee = res.data?.data || res.data
 
-      // Refresh the list
-      await loadData()
-
       toast({
         title: "نجح",
         description: "تم إنشاء الموظف بنجاح",
@@ -226,6 +223,11 @@ export function EmployeesPage() {
 
       setCreateDialogOpen(false)
       setFormData(initialFormData)
+
+      // Refresh the list after a short delay to ensure backend consistency
+      setTimeout(() => {
+        loadData()
+      }, 500)
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || err.message || "فشل إنشاء الموظف"
       setFormError(errorMessage)
@@ -283,9 +285,6 @@ export function EmployeesPage() {
       const res = await apiService.updateManagementUser(selectedEmployee.id, updateData)
       const updatedEmployee = res.data?.data || res.data
 
-      // Refresh the list
-      await loadData()
-
       toast({
         title: "نجح",
         description: "تم تحديث الموظف بنجاح",
@@ -294,6 +293,11 @@ export function EmployeesPage() {
       setEditDialogOpen(false)
       setSelectedEmployee(null)
       setFormData(initialFormData)
+
+      // Refresh the list after a short delay to ensure backend consistency
+      setTimeout(() => {
+        loadData()
+      }, 500)
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || err.message || "فشل تحديث الموظف"
       setFormError(errorMessage)
@@ -320,8 +324,8 @@ export function EmployeesPage() {
       setSaving(true)
       await apiService.deleteManagementUser(selectedEmployee.id)
 
-      // Refresh the list
-      await loadData()
+      // Remove from local state immediately for instant feedback
+      setEmployees((prev) => prev.filter((e) => e.id !== selectedEmployee.id))
 
       toast({
         title: "نجح",
@@ -330,13 +334,32 @@ export function EmployeesPage() {
 
       setDeleteDialogOpen(false)
       setSelectedEmployee(null)
+      
+      // Refresh the list in the background to ensure consistency
+      loadData().catch(() => {})
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || err.message || "فشل حذف الموظف"
-      toast({
-        title: "خطأ",
-        description: errorMessage,
-        variant: "destructive",
-      })
+      
+      // Check if it's a 404 error (user already deleted)
+      if (err.response?.status === 404) {
+        // Remove from list since it doesn't exist on server
+        setEmployees((prev) => prev.filter((e) => e.id !== selectedEmployee.id))
+        toast({
+          title: "تنبيه",
+          description: "الموظف غير موجود أو تم حذفه مسبقاً. تم تحديث القائمة.",
+          variant: "default",
+        })
+        setDeleteDialogOpen(false)
+        setSelectedEmployee(null)
+        // Refresh to sync with server
+        loadData().catch(() => {})
+      } else {
+        toast({
+          title: "خطأ",
+          description: errorMessage,
+          variant: "destructive",
+        })
+      }
     } finally {
       setSaving(false)
     }
@@ -354,11 +377,25 @@ export function EmployeesPage() {
 
   return (
     <div className="space-y-4 p-4 md:p-6">
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-        <Button onClick={handleCreate} className="bg-amber-600 hover:bg-amber-700 w-full sm:w-auto">
-          <UserPlus className="ml-2 rtl:mr-2 rtl:ml-0 h-4 w-4" />
-          إضافة موظف جديد
-        </Button>
+      <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between">
+        <div className="flex gap-2 w-full sm:w-auto">
+          <Button 
+            onClick={handleCreate} 
+            className="bg-amber-600 hover:bg-amber-700 flex-1 sm:flex-initial"
+          >
+            <UserPlus className="ml-2 rtl:mr-2 rtl:ml-0 h-4 w-4" />
+            إضافة موظف جديد
+          </Button>
+          <Button
+            onClick={() => loadData()}
+            variant="outline"
+            size="icon"
+            disabled={loading}
+            title="تحديث القائمة"
+          >
+            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">

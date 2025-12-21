@@ -126,9 +126,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <Filter className="h-4 w-4 ml-2" />
                 تصدير
               </Button>
-              <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700">
-                إضافة جديد
-              </Button>
             </div>
           </div>
         </header>

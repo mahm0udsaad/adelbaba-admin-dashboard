@@ -44,56 +44,56 @@ export function DashboardOverview({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-4 gap-x-4">
         <Card className="border-blue-200 bg-blue-500 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-white">Total Companies</CardTitle>
+            <CardTitle className="text-sm font-medium text-white">إجمالي الشركات</CardTitle>
             <Building2 className="h-4 w-4 text-white" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">{totalCompanies}</div>
             <p className="text-xs text-white">
               <TrendingUp className="inline h-3 w-3 mr-1" />
-              Live data from API
+              بيانات مباشرة من API
             </p>
           </CardContent>
         </Card>
 
         <Card className="border-green-200 bg-green-500 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-white">Active Users</CardTitle>
+            <CardTitle className="text-sm font-medium text-white">المستخدمين النشطين</CardTitle>
             <Users className="h-4 w-4 text-white" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">{totalUsers}</div>
             <p className="text-xs text-white">
               <TrendingUp className="inline h-3 w-3 mr-1" />
-              Live data from API
+              بيانات مباشرة من API
             </p>
           </CardContent>
         </Card>
 
         <Card className="border-yellow-200 bg-yellow-500 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-white">Open Tickets</CardTitle>
+            <CardTitle className="text-sm font-medium text-white">التذاكر المفتوحة</CardTitle>
             <Headphones className="h-4 w-4 text-white" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">{openTickets}</div>
             <p className="text-xs text-white">
               <Clock className="inline h-3 w-3 mr-1" />
-              Live data from API
+              بيانات مباشرة من API
             </p>
           </CardContent>
         </Card>
 
           <Card className="border-red-200 bg-red-500 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-white">System Status</CardTitle>
+            <CardTitle className="text-sm font-medium text-white">حالة النظام</CardTitle>
             <CreditCard className="h-4 w-4 text-white" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">Online</div>
+            <div className="text-2xl font-bold text-white">متصل</div>
             <p className="text-xs text-white">
               <CheckCircle className="inline h-3 w-3 mr-1" />
-              API Connected
+              API متصل
             </p>
           </CardContent>
         </Card>
@@ -102,23 +102,23 @@ export function DashboardOverview({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-black font-bold">Recent Activity</CardTitle>
-            <CardDescription>Latest system activities and updates</CardDescription>
+            <CardTitle className="text-black font-bold">النشاط الأخير</CardTitle>
+            <CardDescription>أحدث الأنشطة والتحديثات في النظام</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <CheckCircle className="h-4 w-4 text-green-500" />
                 <div className="flex-1">
-                  <p className="text-sm font-medium">New company verified</p>
-                  <p className="text-xs text-muted-foreground">TechCorp Industries - 2 hours ago</p>
+                  <p className="text-sm font-medium">تم التحقق من شركة جديدة</p>
+                  <p className="text-xs text-muted-foreground">TechCorp Industries - منذ ساعتين</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <Clock className="h-4 w-4 text-amber-500" />
                 <div className="flex-1">
-                  <p className="text-sm font-medium">Support ticket created</p>
-                  <p className="text-xs text-muted-foreground">Payment processing issue - 4 hours ago</p>
+                  <p className="text-sm font-medium">تم إنشاء تذكرة دعم</p>
+                  <p className="text-xs text-muted-foreground">مشكلة في معالجة الدفع - منذ 4 ساعات</p>
                 </div>
               </div>
             </div>
@@ -127,27 +127,27 @@ export function DashboardOverview({
 
         <Card>
           <CardHeader>
-              <CardTitle className="text-black font-bold">System Status</CardTitle>
-            <CardDescription>Current system health and performance</CardDescription>
+              <CardTitle className="text-black font-bold">حالة النظام</CardTitle>
+            <CardDescription>حالة النظام الحالية والأداء</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm">API Response Time</span>
+                <span className="text-sm">وقت استجابة API</span>
                 <Badge variant="secondary" className="bg-green-100 text-green-800">
-                  Good
+                  جيد
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">Database Performance</span>
+                <span className="text-sm">أداء قاعدة البيانات</span>
                 <Badge variant="secondary" className="bg-green-100 text-green-800">
-                  Optimal
+                  مثالي
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">Server Load</span>
+                <span className="text-sm">حمل الخادم</span>
                 <Badge variant="secondary" className="bg-amber-100 text-amber-800">
-                  Moderate
+                  متوسط
                 </Badge>
               </div>
             </div>
