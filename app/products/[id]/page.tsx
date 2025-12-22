@@ -35,13 +35,14 @@ function formatDate(dateString?: string | null) {
   if (!dateString) return "غير متوفر"
   try {
     const date = new Date(dateString)
-    return new Intl.DateTimeFormat("ar-SA", {
+    return new Intl.DateTimeFormat("ar-EG", {
       year: "numeric",
       month: "long",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
       calendar: "gregory",
+      numberingSystem: "latn",
     }).format(date)
   } catch {
     return dateString

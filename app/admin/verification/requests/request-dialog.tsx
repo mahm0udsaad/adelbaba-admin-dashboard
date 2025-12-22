@@ -208,7 +208,10 @@ export default function RequestDialog({ id, open, onOpenChange, onUpdated, updat
                     <Calendar className="h-3.5 w-3.5" />
                     تاريخ الإنشاء
                   </Label>
-                  <p className="text-sm">{new Date(data.created_at).toLocaleString("ar-SA")}</p>
+                  <p className="text-sm">{new Date(data.created_at).toLocaleString("ar-EG", {
+                    calendar: "gregory",
+                    numberingSystem: "latn"
+                  })}</p>
                 </div>
                 <div className="space-y-1">
                   <Label className="text-xs text-muted-foreground flex items-center gap-1.5">

@@ -268,11 +268,12 @@ export function OrdersPage({ initialOrders }: { initialOrders?: Order[] }) {
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          {new Intl.DateTimeFormat("ar-SA", {
+                          {new Intl.DateTimeFormat("ar-EG", {
                             year: "numeric",
                             month: "2-digit",
                             day: "2-digit",
                             calendar: "gregory",
+                            numberingSystem: "latn",
                           }).format(new Date(order.created_at))}
                         </TableCell>
                         <TableCell>

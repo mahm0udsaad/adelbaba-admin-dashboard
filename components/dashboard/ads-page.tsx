@@ -112,21 +112,23 @@ export function AdsPage({ initialAds }: { initialAds?: Ad[] }) {
                 <TableCell>{ad.location || "-"}</TableCell>
                 <TableCell>
                   {ad.starts_at
-                    ? new Intl.DateTimeFormat("ar-SA", {
+                    ? new Intl.DateTimeFormat("ar-EG", {
                         year: "numeric",
                         month: "2-digit",
                         day: "2-digit",
                         calendar: "gregory",
+                        numberingSystem: "latn",
                       }).format(new Date(ad.starts_at))
                     : "-"}
                 </TableCell>
                 <TableCell>
                   {ad.ends_at
-                    ? new Intl.DateTimeFormat("ar-SA", {
+                    ? new Intl.DateTimeFormat("ar-EG", {
                         year: "numeric",
                         month: "2-digit",
                         day: "2-digit",
                         calendar: "gregory",
+                        numberingSystem: "latn",
                       }).format(new Date(ad.ends_at))
                     : "-"}
                 </TableCell>

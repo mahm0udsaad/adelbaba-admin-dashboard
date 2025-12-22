@@ -196,11 +196,12 @@ export function CompaniesPage({ initialCompanies }: { initialCompanies?: Company
                   if (!dateString) return "N/A"
                   try {
                     const date = new Date(dateString)
-                    return new Intl.DateTimeFormat("ar-SA", {
+                    return new Intl.DateTimeFormat("ar-EG", {
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",
                       calendar: "gregory",
+                      numberingSystem: "latn",
                     }).format(date)
                   } catch {
                     return dateString

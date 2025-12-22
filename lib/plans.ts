@@ -221,6 +221,7 @@ export function formatPrice(price?: number | null): string {
   return new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
+    numberingSystem: "latn", // Ensure English numerals
   }).format(price)
 }
 
@@ -230,7 +231,8 @@ export function formatDate(timestamp?: string): string {
     return new Intl.DateTimeFormat("ar-EG", {
       dateStyle: "medium",
       timeStyle: "short",
-      calendar: "gregory",
+      calendar: "gregory", // Force Gregorian calendar
+      numberingSystem: "latn", // Force English numerals
     }).format(new Date(timestamp))
   } catch {
     return timestamp

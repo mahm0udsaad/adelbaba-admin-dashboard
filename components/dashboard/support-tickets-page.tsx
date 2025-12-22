@@ -398,11 +398,12 @@ export function SupportTicketsPage({ initialTickets }: { initialTickets?: Suppor
                 </TableCell>
                 <TableCell>{ticket.assignedTo || "Unassigned"}</TableCell>
                 <TableCell>
-                  {new Intl.DateTimeFormat("ar-SA", {
+                  {new Intl.DateTimeFormat("ar-EG", {
                     year: "numeric",
                     month: "2-digit",
                     day: "2-digit",
                     calendar: "gregory",
+                    numberingSystem: "latn",
                   }).format(new Date(ticket.created_at))}
                 </TableCell>
                 <TableCell>
@@ -534,13 +535,14 @@ export function SupportTicketsPage({ initialTickets }: { initialTickets?: Suppor
                           <div className="flex items-center justify-between text-xs text-gray-500">
                             <span>{entry.user?.name || "System"}</span>
                             <span>
-                              {new Intl.DateTimeFormat("ar-SA", {
+                              {new Intl.DateTimeFormat("ar-EG", {
                                 year: "numeric",
                                 month: "2-digit",
                                 day: "2-digit",
                                 hour: "2-digit",
                                 minute: "2-digit",
                                 calendar: "gregory",
+                                numberingSystem: "latn",
                               }).format(new Date(entry.created_at))}
                             </span>
                           </div>
@@ -582,13 +584,14 @@ export function SupportTicketsPage({ initialTickets }: { initialTickets?: Suppor
                   <p><span className="text-gray-500">Category:</span> {ticketDetail.category || "—"}</p>
                   <p>
                     <span className="text-gray-500">Created:</span>{" "}
-                    {new Intl.DateTimeFormat("ar-SA", {
+                    {new Intl.DateTimeFormat("ar-EG", {
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",
                       hour: "2-digit",
                       minute: "2-digit",
                       calendar: "gregory",
+                      numberingSystem: "latn",
                     }).format(new Date(ticketDetail.created_at))}
                   </p>
                 </div>

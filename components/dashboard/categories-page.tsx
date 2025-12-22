@@ -204,11 +204,12 @@ export function CategoriesPage({ initialCategories }: { initialCategories?: any 
                 </TableCell>
                 <TableCell>
                   {category.created_at
-                    ? new Intl.DateTimeFormat("ar-SA", {
+                    ? new Intl.DateTimeFormat("ar-EG", {
                         year: "numeric",
                         month: "2-digit",
                         day: "2-digit",
                         calendar: "gregory",
+                        numberingSystem: "latn",
                       }).format(new Date(category.created_at))
                     : "—"}
                 </TableCell>
